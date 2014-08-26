@@ -18,11 +18,33 @@ public class VentanaPer {
 	
 	//DECLARACIÓN DE MÉTODOS
 	
+	/*Descripción: Lista que limpia el contenido de la listas nombreLista, indLista y Lista
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
+	private void limpiarListas(){
+		int i=0;
+		while(i<120){
+			Lista[i]= null;
+			i++;
+		}
+		i=0;
+		while(i<120){
+			indLista[i]=0;
+			i++;
+		}
+		i=0;
+		while(i<120){
+			nombreLista[i]= "";
+			i++;
+		}
+	}
+	
 	/* Descripción: Función que ordena alfabeticamente una lista
 	 * Entrada: Número de atributo a obtener
 	 * 			Número de elementos en el vector
 	 * Salida: Ninguna */
-	void ordenarLista(int cant){
+	private void ordenarLista(int cant){
 		int i=1;
 		int indAux;
 		String aux;
@@ -52,6 +74,8 @@ public class VentanaPer {
 	
 	private void cargarNombre(){
 		Personas temp= new Personas();
+		String espacio="                    ";	//Espacio de 20
+		limpiarListas();	//Limpia el contenido de las listas
 		int i= 0;
 		while(true){
 			//Obtiene en las clases sus atributos hasta que ya no encuentra
@@ -59,7 +83,7 @@ public class VentanaPer {
 			if(temp.Obtener(i+1, "Reg_Pers.txt") == false){break;}
 			Lista[i]=temp;
 			indLista[i]= i;
-			nombreLista[i]= temp.getNombre();
+			nombreLista[i]= temp.getNombre()+" "+temp.getApellido1()+" "+temp.getApellido2();
 			i++;
 		}
 		cantPers= i;
@@ -67,14 +91,17 @@ public class VentanaPer {
 	
 	
 	/*Descripción: Función que maneja la ventana para agregar una persona
-	 * Entrada: Ninguna
-	 * Salida:Ninguna
+	 * Entrada: Un int, si es 0 significa que va a agregar una nueva personas, sino es el número de persona a editar
+	 * Salida: Ninguna
 	 */
-	private void ventanaPersona(){
-		JFrame vAgregar= new JFrame("Agregar Persona");		//Creación de la ventana
+	private void ventanaPersona(int numPer){
+		JFrame vAgregar;		//Creación de la ventana
 		JTextField espacio1,espacio2,espacio3,espacio4,espacio5;	//Inicialización de los cuadros de entrada de texto
 		JLabel label1,label2,label3,label4,label5;
 		JButton boton;
+		
+		if(numPer==0) vAgregar= new JFrame("Agregar Persona");
+		else vAgregar= new JFrame("Editar Persona");
 		
 		//Colocación de los labels
 		label1= new JLabel("Nombre:");
@@ -99,7 +126,8 @@ public class VentanaPer {
 		espacio5= new JTextField();
 		espacio5.setBounds(100,160,200,20);
 		//Colocación y acción del botón
-		boton= new JButton("Agregar");
+		if(numPer==0) boton= new JButton("Agregar");
+		else boton= new JButton("Editar");
 		boton.setBounds(100,200,125,25);
 		boton.setMnemonic(KeyEvent.VK_I);
 		boton.addActionListener(new ActionListener(){
@@ -118,7 +146,8 @@ public class VentanaPer {
 				palabra= espacio5.getText();
 				humano.setCorreo(palabra);
 				humano.setCategoria(0);
-				humano.Agregar("Reg_Pers.txt");
+				if(numPer==0)humano.Agregar("Reg_Pers.txt");
+				else humano.Editar(indLista[numPer]);
 				vAgregar.dispose();
 				cargarNombre();
 				ordenarLista(cantPers);
@@ -141,9 +170,54 @@ public class VentanaPer {
 		vAgregar.add(boton);
 		
 		vAgregar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
-		vAgregar.setSize(400,400);	//Tamaño de la ventana
+		vAgregar.setSize(350,270);	//Tamaño de la ventana
 		vAgregar.setVisible(true);
 		vAgregar.setResizable(false);
+	}
+	
+	/*Descripción: Función que crea la ventana de eliminación de una persona
+	 * Entrada: Int número de persona a eliminar
+	 * Salida: Ninguna
+	 */
+	private void ventanaEliminar(int numPer){
+		JFrame vEliminar= new JFrame("Eliminar Persona");
+		JLabel mensaje= new JLabel("¿Esta seguro de eliminar a la persona del registro?");
+		JButton aceptar= new JButton("Aceptar");
+		JButton cancelar= new JButton("Cancelar");
+		Personas humano= new Personas();
+		
+		mensaje.setBounds(30,20,300,25);
+		aceptar.setBounds(85,50,90,25);
+		aceptar.setMnemonic(KeyEvent.VK_I);
+		aceptar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				humano.eliminar(indLista[numPer]);
+				vEliminar.dispose();
+				cantPers--;
+				cargarNombre();
+				ordenarLista(cantPers);
+				list.updateUI();
+				return;
+			}
+		});
+		cancelar.setBounds(195,50,90,25);
+		cancelar.setMnemonic(KeyEvent.VK_I);
+		cancelar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				vEliminar.dispose();
+				return;
+			}
+		});
+		
+		vEliminar.setLayout(null);
+		vEliminar.add(mensaje);
+		vEliminar.add(aceptar);
+		vEliminar.add(cancelar);
+		
+		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+		vEliminar.setSize(360,120);
+		vEliminar.setVisible(true);
+		vEliminar.setResizable(false);
 	}
 	
 	/*Descripción: Función que coloca los atributos de los botones
@@ -153,23 +227,41 @@ public class VentanaPer {
 	private void colocarBotones(){
 		botonAgregar= new JButton("Agregar");
 		botonAgregar.setBounds(10,130,125,25);
+		ImageIcon imageAdd= new ImageIcon("add.gif");
+		botonAgregar.setIcon(imageAdd);
 		botonAgregar.setMnemonic(KeyEvent.VK_I);
 		botonAgregar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				ventanaPersona();
+				ventanaPersona(0);
 			}
 		});
 		botonEditar= new JButton("Editar");
 		botonEditar.setBounds(10,161,125,25);
+		botonEditar.setMnemonic(KeyEvent.VK_I);
+		botonEditar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				ventanaPersona(list.getSelectedIndex());
+			}
+		});
 		botonEliminar= new JButton("Eliminar");
 		botonEliminar.setBounds(10,192,125,25);
+		ImageIcon imageDelete= new ImageIcon("delete.gif");
+		botonEliminar.setIcon(imageDelete);
+		botonEliminar.setMnemonic(KeyEvent.VK_I);
+		botonEliminar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				ventanaEliminar(list.getSelectedIndex());
+			}
+		});
 	}
 	
 	public VentanaPer(){
 		JFrame ventana= new JFrame("Lista de Personas");
+		JLabel contPers; 
 		
 		colocarBotones();
 		cargarNombre();
+		contPers= new JLabel(cantPers+" personas encontradas");
 		ordenarLista(cantPers);
 		list= new JList(nombreLista);
 		list.setSelectedIndex(0);
@@ -177,7 +269,10 @@ public class VentanaPer {
 		list.setBounds(150,130,500,260);
 		list.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
+		contPers.setBounds(0,440,150,25);
+		
 		ventana.setLayout(null);
+		ventana.add(contPers);
 		ventana.add(botonAgregar);
 		ventana.add(botonEditar);
 		ventana.add(botonEliminar);

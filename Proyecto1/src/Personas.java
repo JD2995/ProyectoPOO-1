@@ -3,9 +3,7 @@
  * Programación Orientada a Objetos
  */
 
-import java.io.File;	//Clase para manipulacion de archivos
 import java.io.*;
-import java.io.FileWriter;
 
 //Clase con atributos y metodos del registro de Personas
 
@@ -34,7 +32,7 @@ public class Personas {
 		Apellido1= cApellido;
 	}
 	public String getApellido2(){
-		return Apellido1;
+		return Apellido2;
 	}
 	public void setApellido2(String cApellido){
 		Apellido2= cApellido;
@@ -83,6 +81,7 @@ public class Personas {
 				}
 				//Si encontró el número de persona registrada
 				if(i == num){
+					fr.close();
 					return true;
 				}
 				j++;	//Aumenta el carácter a revisar en el registro
@@ -111,13 +110,14 @@ public class Personas {
 		char Buffer[]= new char[512];	//Creación del buffer de carácteres
 		int cant_chars= 0;		//Cantidad de carácteres en el buffer
 		File archivo= null;
+		FileReader fr;
 		//Si existe el número de persona
 		if(Existe_p(num,name) == false){
 			return false;
 		}
 		try{
 			archivo= new File(name);
-			FileReader fr= new FileReader (archivo);
+			fr= new FileReader (archivo);
 			cant_chars= fr.read(Buffer,0,512);		//Guarda en el buffer los carácteres
 			
 			//Mientras haya carácteres que leer
@@ -146,6 +146,7 @@ public class Personas {
 						palabra+= Buffer[j];
 						j++;
 					}
+					fr.close();
 					return true;
 				}
 				//Si encontró el separador entre personas
@@ -189,6 +190,67 @@ public class Personas {
 			System.out.println("ERROR");
 		}
 	}
+	
+
+	/*Descripción: Función que elimina los datos de una persona del registro
+	 * Entrada: Número en el registro de la persona a eliminar
+	 * Salida: Ninguna
+	 */
+	public void eliminar(int num){
+		File archivo= new File("Reg_Pers.txt");
+		File archivo1= new File("Hola.txt");
+		num++;
+		try{
+			archivo1.createNewFile();
+			FileWriter escribir= new FileWriter(archivo1,true);
+			FileReader leer= new FileReader(archivo);
+			char Buffer[]= new char[512];
+			int cant_chars=0;	//Contador de caracteres en el buffer
+			int i=1;
+			int j=0;
+			
+			cant_chars= leer.read(Buffer,0,512);
+			//Mientras existan caracteres en el archivo
+			while(cant_chars!= -1){
+				//Si encontro el número de persona a eliminar
+				if(i == num){
+					escribir.flush();	//Actualiza el registro en disco
+					//Pasa atraves de los datos de la persona sin escribirla en el nuevo registro
+					while(true){
+						if(j == cant_chars){
+							cant_chars= leer.read(Buffer,0,512);
+							j=0;
+						}
+						//Si llegó a los datos de la siguiente persona
+						if(Buffer[j] == ','){break;}
+						j++;
+					}
+					escribir.flush();	//Actualiza en disco lo escrito
+					j++;
+					i++;					
+				}
+				//Si leyó todos los caracteres del Buffer
+				if(j == cant_chars){
+					cant_chars= leer.read(Buffer,0,512);
+					j=0;
+				}
+				if(Buffer[j] == ','){i++;}	//Si pasó a los datos de otra persona
+				if(cant_chars!= -1){escribir.write(Buffer[j]);}
+				j++;		
+				
+			}
+			leer.close();
+			escribir.close();
+			leer= null;
+			escribir= null;
+			System.gc();
+		}catch(Exception e){
+			System.out.println("Me caí");
+			return;
+		}
+		archivo.delete();	//Elimina el archivo original
+		archivo1.renameTo(archivo);		//Renombra el archivo auxiliar con el del original
+	}
 		
 	
 	/*Descripcion: Funcion que cambia en el registro con lo que se encuentra en los atributos de la clase
@@ -198,6 +260,7 @@ public class Personas {
 	void Editar(int num){
 		File archivo= new File("Reg_Pers.txt");
 		File archivo1= new File("Hola.txt");
+		num++;
 		try{
 			archivo1.createNewFile();
 			FileWriter escribir= new FileWriter(archivo1,true);
@@ -252,7 +315,7 @@ public class Personas {
 	 * Entrada: String con la ruta del archivo
 	 * Salida: True si se ejecutó con éxito, False si hubo algún error
 	 */
-	boolean Cargar(String name){
+	public boolean Cargar(String name){
 		int i=1;
 		
 		try{

@@ -11,6 +11,5 @@ public class Proyecto1{
 		int a=32;
 		Ventana1 window= new Ventana1("Gestor de prestamos");
 		Personas Hola= new Personas();
-		System.out.println("HOLA MUNDO");
 	}
 }
