@@ -156,6 +156,7 @@ public class VentanaPer {
 		rFamiliar= new JRadioButton("Familiar");
 		rFamiliar.setBounds(240, 195, 80, 25);
 		categoria.add(rColega); categoria.add(rEstudiante); categoria.add(rFamiliar);
+		System.out.println(categoria);
 		//Colocación de los de cuadros de entrada
 		espacio1= new JTextField();
 		espacio1.setBounds(100,20,200,20);

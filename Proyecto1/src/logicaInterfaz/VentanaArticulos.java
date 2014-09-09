@@ -31,6 +31,9 @@ public class VentanaArticulos {
 	private int indLista[]= new int[120];	//Vector con el índice de los nombres de Lista
 	private int cantArtic= 0;	//Contador de articulos en la tabla
 	JFrame vArticulos = null;
+	private JTextField cuadroBusLibro;
+	private JRadioButton rNomLibro, rGenLibro,rCalLibro;
+	private ButtonGroup grupoBusqueda;
 	ModeloDatos nombreLista= new ModeloDatos();
 	JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
 	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar;
@@ -414,7 +417,18 @@ public class VentanaArticulos {
 		botonImportar.setBounds(10,364,125,25);
 		ImageIcon imageImportar= new ImageIcon("importar.gif");
 		botonImportar.setIcon(imageImportar);
+		
+		botonBuscar= new JButton("Buscar");
+		botonBuscar.setBounds(560,90,90,25);
+		botonBuscar.setMnemonic(KeyEvent.VK_I);
+		botonBuscar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//buscarLista();
+			}
+		});
 	}
+	
+	
 	
 	//Clase para los objetos de la tabla de articulos
 	class ModeloDatos extends AbstractTableModel{
@@ -472,6 +486,19 @@ public class VentanaArticulos {
 		cuadroImage.add(lImagen);
 		cuadroImage.setBorder(BorderFactory.createLineBorder(Color.black));
 		cuadroImage.setBounds(45, 130, 90, 135);
+		
+		//radio buttons para la busqueda de libros
+		rNomLibro = new JRadioButton("Nombre");
+		rNomLibro.setBounds(130,90,70,25);
+		rGenLibro = new JRadioButton("Género");
+		rGenLibro.setBounds(200,90,70,25);
+		rCalLibro = new JRadioButton("Calificación");
+		rCalLibro.setBounds(270,90,95,25);
+		//grupoBusqueda.add(rCalLibro);grupoBusqueda.add(rGenLibro);grupoBusqueda.add(rNomLibro);
+		
+		//Cuadro de entrada de texto para busqueda
+		cuadroBusLibro = new JTextField();
+		cuadroBusLibro.setBounds(380,90,170,25);
 
 		
 		//Inserción de los componentes a la ventana
@@ -482,7 +509,11 @@ public class VentanaArticulos {
 		ventana.add(botonEliminar);
 		ventana.add(botonImportar);
 		ventana.add(cuadroImage);
-		//ventana.add(botonBuscar);
+		ventana.add(cuadroBusLibro);
+		ventana.add(botonBuscar);
+		ventana.add(rNomLibro);
+		ventana.add(rGenLibro);
+		ventana.add(rCalLibro);
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(675,450);	//Tamaño de la ventana
