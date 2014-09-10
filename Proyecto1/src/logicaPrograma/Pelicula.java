@@ -37,13 +37,35 @@ public class Pelicula extends Articulo{
 			escribir.write(super.genero+"_");
 			escribir.write(calificacion+"_");
 			escribir.write(cantidad+"_");
-			escribir.write(nImagen+",");
+			escribir.write(nImagen+"_");
 			escribir.write(director+"_");
-			escribir.write(genero+"_");
+			escribir.write(genero+",");
 			escribir.close();
 		}
 		catch(Exception e){
 			System.out.println("ERROR");
 		}
+	}
+	
+	/*Descripción: Función que une los datos de libros de un archivo al del
+	 * archivo de Registro
+	 * Entrada: String con la ruta del archivo
+	 * Salida: True si se ejecutó con éxito, False si hubo algún error
+	 */
+	public boolean Cargar(String name){
+		int i=1;
+		
+		try{
+			while(true){
+				if(Existe_p(i,name) == false){break;}
+				Obtener(i,name);
+				Agregar("Peliculas.txt");
+				i++;
+			}
+		}
+		catch(Exception e){
+			return false;
+		}
+		return true;
 	}
 }

@@ -136,7 +136,7 @@ public class Libros extends Articulo{
 	 * Entrada: String con la ruta del archivo
 	 * Salida: True si se ejecutó con éxito, False si hubo algún error
 	 */
-	boolean Cargar(String name){
+	public boolean Cargar(String name){
 		int i=1;
 		
 		try{

@@ -1,18 +1,20 @@
 package logicaInterfaz;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -30,13 +32,19 @@ public class VentanaArticulos {
 	private Articulo Lista[]= new Articulo[120];
 	private int indLista[]= new int[120];	//Vector con el índice de los nombres de Lista
 	private int cantArtic= 0;	//Contador de articulos en la tabla
-	JFrame vArticulos = null;
+	private JFrame vArticulos = null;
+	private ModeloDatos nombreLista= new ModeloDatos();
+	private JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
+	private ListSelectionModel cellSelectionModel= tabla.getSelectionModel();
+	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar;
 	private JTextField cuadroBusLibro;
 	private JRadioButton rNomLibro, rGenLibro,rCalLibro;
 	private ButtonGroup grupoBusqueda;
-	ModeloDatos nombreLista= new ModeloDatos();
-	JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
-	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar;
+	private JPanel cuadroImage= null;
+	private Image img= null;
+	private Image newimg= null;
+	private ImageIcon iconImagen= null;
+	private JLabel lImagen;
 	
 	//DEFINICION DE METODOS
 	
@@ -138,6 +146,7 @@ public class VentanaArticulos {
 			Lista[i].setGenero(temp.getGenero());
 			Lista[i].setCalificacion(temp.getCalificacion());
 			Lista[i].setCantidad(temp.getCantidad());
+			Lista[i].setNImagen(temp.getNImagen());
 			if(modo == 0){
 				((Libros) Lista[i]).setAutor(((Libros)temp).getAutor());
 				((Libros) Lista[i]).setEditorial(((Libros)temp).getEditorial());
@@ -165,10 +174,9 @@ public class VentanaArticulos {
 		JLabel lImagen;
 		JTextField espacio[]= new JTextField[7];
 		JButton botonImagen, botonAgregar, botonCancelar;
-		BufferedImage imagen=null;
 		ImageIcon iconImagen= null;
 		JPanel cuadroImage= new JPanel(new BorderLayout());
-		
+		String hileraImagen[]= new String[2];
 		
 		//Colocación del nombre de la ventana
 		if(modo == 0 && numArtic == -1) vArticulos= new JFrame("Agregar Libro");
@@ -240,6 +248,13 @@ public class VentanaArticulos {
 		//Colocación de botones
 		botonImagen= new JButton("Explorar");
 		botonImagen.setBounds(220,153,100,20);
+		botonImagen.setMnemonic(KeyEvent.VK_1);
+		botonImagen.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				hileraImagen[0]= ventanaImagen();
+				return;
+			}
+		});
 		if(numArtic == -1) botonAgregar= new JButton("Agregar");
 		else botonAgregar= new JButton("Editar");
 		botonAgregar.setMnemonic(KeyEvent.VK_I);
@@ -260,7 +275,6 @@ public class VentanaArticulos {
 				objeto.setCalificacion(Integer.parseInt(palabra));
 				palabra= espacio[3].getText();
 				objeto.setCantidad(Integer.parseInt(palabra));
-				objeto.setNImagen(null);
 				palabra= espacio[4].getText();
 				if(modo == 0) ((Libros) objeto).setAutor(palabra);
 				else if(modo == 1) ((Revista) objeto).setEditorial(palabra);
@@ -270,6 +284,29 @@ public class VentanaArticulos {
 				else if(modo == 2) ((Pelicula) objeto).setGenero(palabra);
 				palabra= espacio[6].getText();
 				if(modo == 0) ((Libros) objeto).setEdicion(palabra);
+				//Guardando en el proyecto la imagen de portada conseguida
+				Path FROM= Paths.get(hileraImagen[0]);
+				Path TO= null;
+				//Si es un articulo a editar
+				if(modo == 0 && numArtic!= -1) hileraImagen[1]="Libro"+indLista[numArtic]+"."+hileraImagen[0].substring(hileraImagen[0].length()-3, hileraImagen[0].length());
+				else if(modo == 1 && numArtic!= -1) hileraImagen[1]="Revista"+indLista[numArtic];
+				else if(modo == 2 && numArtic!= -1) hileraImagen[1]="Pelicula"+indLista[numArtic];
+				//Si es un articulo nuevo
+				cargarNombre();
+				ordenarLista(cantArtic);
+				if(modo == 0 && numArtic==-1) hileraImagen[1]="Libros"+cantArtic;
+				else if(modo == 1 && numArtic==-1) hileraImagen[1]="Revista"+cantArtic;
+				else if(modo == 2 && numArtic==-1) hileraImagen[1]= "Pelicula"+cantArtic;
+				TO= Paths.get(hileraImagen[1]);
+				CopyOption [] options= new CopyOption[]{
+					StandardCopyOption.REPLACE_EXISTING,
+					StandardCopyOption.COPY_ATTRIBUTES
+				};
+				try {
+					Files.copy(FROM, TO, options);
+				} catch (IOException e1) {}
+				objeto.setNImagen(hileraImagen[1]);		//Coloca la direccion de la imagen
+				//Realiza los cambios o inserción del nuevo elemento
 				if(numArtic==-1){
 					if(modo == 0)objeto.Agregar("Libros.txt");
 					else if(modo == 1)objeto.Agregar("Revistas.txt");
@@ -280,6 +317,7 @@ public class VentanaArticulos {
 					if(modo == 1)objeto.Editar(indLista[numArtic],"Revistas.txt");
 					if(modo == 2)objeto.Editar(indLista[numArtic],"Peliculas.txt");
 				}
+				
 				vArticulos.dispose();
 				cargarNombre();
 				ordenarLista(cantArtic);
@@ -376,6 +414,36 @@ public class VentanaArticulos {
 		vEliminar.setResizable(false);
 	}
 	
+	private String ventanaImagen(){
+		JFrame vImportar= new JFrame("Ventana");
+		JFileChooser archivo= new JFileChooser();
+		String hilera= null;
+		
+		archivo.showOpenDialog(vImportar);
+		try{
+			hilera=archivo.getSelectedFile().getAbsolutePath();
+		}
+		catch(Exception e){hilera= null;}
+		vImportar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+		return hilera;
+	}
+	
+	private void ventanaImportar(){
+		Articulo articulo= null;
+		JFrame vImportar= new JFrame("Ventana");
+		JFileChooser archivo= new JFileChooser();
+		
+		if(modo == 0) articulo= new Libros();
+		else if(modo == 1) articulo= new Revista();
+		else if(modo == 2) articulo= new Pelicula();
+		archivo.showOpenDialog(vImportar);
+		try{articulo.Cargar(archivo.getSelectedFile().getAbsolutePath());}
+		catch(Exception e){}
+		cargarNombre();
+		ordenarLista(cantArtic);
+		vImportar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+	}
+	
 	/*Descripción: Funcion que coloca los atributos de los botones
 	 *Entrada: Ninguna
 	 *Salida: Ninguna
@@ -417,7 +485,12 @@ public class VentanaArticulos {
 		botonImportar.setBounds(10,364,125,25);
 		ImageIcon imageImportar= new ImageIcon("importar.gif");
 		botonImportar.setIcon(imageImportar);
-		
+		botonImportar.setMnemonic(KeyEvent.VK_I);
+		botonImportar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				ventanaImportar();
+			}
+		});
 		botonBuscar= new JButton("Buscar");
 		botonBuscar.setBounds(560,90,90,25);
 		botonBuscar.setMnemonic(KeyEvent.VK_I);
@@ -428,9 +501,8 @@ public class VentanaArticulos {
 		});
 	}
 	
-	
-	
 	//Clase para los objetos de la tabla de articulos
+	@SuppressWarnings("serial")
 	class ModeloDatos extends AbstractTableModel{
 		Object datos[][]= new Object[120][4];
 
@@ -451,15 +523,45 @@ public class VentanaArticulos {
 		}
 	}
 	
+	//Clase para el listener de la seleccion de un elemento en la tabla de articulos
+	class ListenerTabla implements ListSelectionListener{
+		ListSelectionModel cellSelectionModel= tabla.getSelectionModel();
+		
+		public void valueChanged(ListSelectionEvent e) {
+			String hilera= null;
+			int[] filaSelect= tabla.getSelectedRows();
+			int[] columnasSelect= tabla.getSelectedColumns();
+			for(int i=0; i<filaSelect.length; i++){
+				for(int j=0; j<columnasSelect.length; j++){
+					hilera= Lista[indLista[filaSelect[i]]].getNImagen();
+					try{
+						iconImagen= null;
+						if(hilera!= null) iconImagen= new ImageIcon(hilera);
+						else iconImagen= new ImageIcon("noImage.png");
+						img= iconImagen.getImage();
+						newimg= img.getScaledInstance(90, 135, Image.SCALE_DEFAULT);
+						iconImagen= new ImageIcon(newimg);
+						lImagen.setIcon(iconImagen);
+						cuadroImage.add(lImagen);
+						cuadroImage.updateUI();
+					}
+					catch(Exception e2){
+						iconImagen= new ImageIcon("noImage.png");
+					}
+					cuadroImage.updateUI();
+				}
+			}
+		}
+	}
+	
 	//Constructor
 	VentanaArticulos(){
 		JFrame ventana= new JFrame("Lista de Artículos");
 		JScrollPane barraDesplazamiento = new JScrollPane(tabla);
 		barraDesplazamiento.setBounds(150,130,500,260); 
-		JLabel lImagen;
-		BufferedImage imagen=null;
-		ImageIcon iconImagen= null;
-		JPanel cuadroImage= new JPanel(new BorderLayout());
+		cuadroImage= new JPanel(new BorderLayout());
+		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		cellSelectionModel.addListSelectionListener(new ListenerTabla());
 
 		//Modificación de los headers de la tabla
 		JTableHeader th = tabla.getTableHeader();
@@ -478,12 +580,15 @@ public class VentanaArticulos {
 		cargarNombre();		//Carga la tabla con los articulos
 		ordenarLista(cantArtic);	//Ordena alfabeticamente la lista
 		
-		iconImagen= new ImageIcon("cronica.jpg");
-		Image img= iconImagen.getImage();
-		Image newimg= img.getScaledInstance(90, 135, Image.SCALE_DEFAULT);
-		iconImagen= new ImageIcon(newimg);
-		lImagen= new JLabel(iconImagen);
-		cuadroImage.add(lImagen);
+		try{
+			iconImagen= new ImageIcon("noImage.png");
+			img= iconImagen.getImage();
+			newimg= img.getScaledInstance(90, 135, Image.SCALE_DEFAULT);
+			iconImagen= new ImageIcon(newimg);
+			lImagen= new JLabel(iconImagen);
+			cuadroImage.add(lImagen);
+		}
+		catch(Exception e){lImagen= null;}
 		cuadroImage.setBorder(BorderFactory.createLineBorder(Color.black));
 		cuadroImage.setBounds(45, 130, 90, 135);
 		
@@ -499,7 +604,6 @@ public class VentanaArticulos {
 		//Cuadro de entrada de texto para busqueda
 		cuadroBusLibro = new JTextField();
 		cuadroBusLibro.setBounds(380,90,170,25);
-
 		
 		//Inserción de los componentes a la ventana
 		ventana.setLayout(null);
@@ -514,6 +618,7 @@ public class VentanaArticulos {
 		ventana.add(rNomLibro);
 		ventana.add(rGenLibro);
 		ventana.add(rCalLibro);
+		
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(675,450);	//Tamaño de la ventana

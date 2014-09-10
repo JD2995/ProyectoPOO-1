@@ -42,7 +42,7 @@ public abstract class Articulo {
 		this.nImagen= image;
 	}
 	public String getNImagen(){
-		return nImagen;
+		return this.nImagen;
 	}
 	
 	public void prestar(){
@@ -60,6 +60,8 @@ public abstract class Articulo {
 	public abstract boolean Obtener(int num,String name);
 	
 	public abstract void Agregar(String Nombre);
+	
+	public abstract boolean Cargar(String name);
 	
 	/*Descripcion: Funcion que cambia en el registro con lo que se encuentra en los atributos de los libros
 	 * Entrada: Número de libro a realizar los cambios

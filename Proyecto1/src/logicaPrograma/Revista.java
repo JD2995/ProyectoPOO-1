@@ -32,12 +32,34 @@ public class Revista extends Articulo{
 			escribir.write(genero+"_");
 			escribir.write(calificacion+"_");
 			escribir.write(cantidad+"_");
-			escribir.write(nImagen+",");
-			escribir.write(editorial+"_");
+			escribir.write(nImagen+"_");
+			escribir.write(editorial+",");
 			escribir.close();
 		}
 		catch(Exception e){
 			System.out.println("ERROR");
 		}
+	}
+	
+	/*Descripción: Función que une los datos de libros de un archivo al del
+	 * archivo de Registro
+	 * Entrada: String con la ruta del archivo
+	 * Salida: True si se ejecutó con éxito, False si hubo algún error
+	 */
+	public boolean Cargar(String name){
+		int i=1;
+		
+		try{
+			while(true){
+				if(Existe_p(i,name) == false){break;}
+				Obtener(i,name);
+				Agregar("Libros.txt");
+				i++;
+			}
+		}
+		catch(Exception e){
+			return false;
+		}
+		return true;
 	}
 }
