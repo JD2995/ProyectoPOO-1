@@ -149,6 +149,7 @@ public class VentanaPer {
 		label6.setBounds(12,190,100,30);
 		
 		//Radio buttons para elegir la categoria de la persona a registrar
+		
 		rColega= new JRadioButton("Colega",true);
 		rColega.setBounds(80, 195, 70, 25);
 		rEstudiante= new JRadioButton("Estudiante");
@@ -157,6 +158,12 @@ public class VentanaPer {
 		rFamiliar.setBounds(240, 195, 80, 25);
 		categoria.add(rColega); categoria.add(rEstudiante); categoria.add(rFamiliar);
 		System.out.println(categoria);
+		if (numPer!=-1){int cate = Lista[indLista[numPer]].getCategoria();
+			if (cate==0){rColega.setSelected(true);}
+			else if (cate==1){rEstudiante.setSelected(true);}
+			else if (cate==2){rFamiliar.setSelected(true);}
+			
+		}
 		//Colocación de los de cuadros de entrada
 		espacio1= new JTextField();
 		espacio1.setBounds(100,20,200,20);
@@ -195,6 +202,12 @@ public class VentanaPer {
 				palabra= espacio5.getText();
 				humano.setCorreo(palabra);
 				humano.setCategoria(0);
+				if (rColega.isSelected()==true){ humano.setCategoria(0);	
+				}
+				if (rEstudiante.isSelected()==true){ humano.setCategoria(1);	
+				}
+				else if (rFamiliar.isSelected()==true){ humano.setCategoria(2);	
+				}
 				if(numPer==-1)humano.Agregar("Reg_Pers.txt");
 				else humano.Editar(indLista[numPer]);
 				vAgregar.dispose();
@@ -293,6 +306,7 @@ public class VentanaPer {
 		int i=0;
 		int j=0;
 		String hilera= cuadroBusc.getText();
+		//System.out.println(hilera);
 		String palabra= null;
 		//Si el cuadro de búsqueda no tiene escrito nada
 		if(hilera.equals("")==true){
@@ -305,11 +319,13 @@ public class VentanaPer {
 			if(rNombre.isSelected()==true) palabra= Lista[i].getNombre();
 			else if(rApellido1.isSelected()==true) palabra= Lista[i].getApellido1();
 			else if(rApellido2.isSelected()==true) palabra= Lista[i].getApellido2();
+			//System.out.println(palabra);
 			if(hilera.startsWith(palabra)==true){
 				nombreLista.setValueAt(j, 0, Lista[i].getNombre());
 				nombreLista.setValueAt(j, 1, Lista[i].getApellido1());
 				nombreLista.setValueAt(j, 2, Lista[i].getApellido2());
 				indLista[j]= i;
+				//System.out.println(Lista);
 				j++;
 			}
 			i++;

@@ -39,7 +39,7 @@ public class VentanaArticulos {
 	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar;
 	private JTextField cuadroBusLibro;
 	private JRadioButton rNomLibro, rGenLibro,rCalLibro;
-	private ButtonGroup grupoBusqueda;
+	private ButtonGroup grupoBusqueda = new ButtonGroup();
 	private JPanel cuadroImage= null;
 	private Image img= null;
 	private Image newimg= null;
@@ -368,6 +368,52 @@ public class VentanaArticulos {
 		vArticulos.setResizable(false);
 	}
 	
+	
+	private void buscarLista(){
+		int i=0;
+		int j=0;
+		String hilera= cuadroBusLibro.getText();
+		//System.out.println(hilera);
+		String palabra= null;
+		//Si el cuadro de búsqueda no tiene escrito nada
+		if(hilera.equals("")==true){
+			cargarNombre();
+			ordenarLista(cantArtic);
+			return;
+		}
+		while(i<cantArtic){
+			if(i == cantArtic) break;
+			if(rNomLibro.isSelected()==true) palabra= Lista[i].getNombre();
+			else if(rGenLibro.isSelected()==true) palabra= Lista[i].getGenero();
+			else if(rCalLibro.isSelected()==true) palabra=Integer.toString(Lista[i].getCalificacion());
+			//System.out.println(palabra);
+			if(hilera.startsWith(palabra)==true){
+				nombreLista.setValueAt(j, 0, Lista[i].getNombre());
+				nombreLista.setValueAt(j, 1, Lista[i].getGenero());
+				nombreLista.setValueAt(j, 2, Lista[i].getCalificacion());
+				nombreLista.setValueAt(j, 3, Lista[i].getCantidad());
+				indLista[j]= i;
+				//System.out.println(Lista);
+				j++;
+			}
+			i++;
+		}
+		cantArtic= j;
+		while(j<120){
+			nombreLista.setValueAt(j, 0, "");
+			nombreLista.setValueAt(j, 1, "");
+			nombreLista.setValueAt(j, 2, "");
+			nombreLista.setValueAt(j, 3, "");
+			indLista[j]=0;
+			j++;
+		}
+	}
+	
+	
+	
+	
+	
+	
 	/*Descripción: Función que crea la ventana de eliminación de una persona
 	 * Entrada: Int número de persona a eliminar
 	 * Salida: Ninguna
@@ -496,7 +542,7 @@ public class VentanaArticulos {
 		botonBuscar.setMnemonic(KeyEvent.VK_I);
 		botonBuscar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				//buscarLista();
+				buscarLista();
 			}
 		});
 	}
@@ -593,13 +639,13 @@ public class VentanaArticulos {
 		cuadroImage.setBounds(45, 130, 90, 135);
 		
 		//radio buttons para la busqueda de libros
-		rNomLibro = new JRadioButton("Nombre");
+		rNomLibro = new JRadioButton("Nombre",true);
 		rNomLibro.setBounds(130,90,70,25);
 		rGenLibro = new JRadioButton("Género");
 		rGenLibro.setBounds(200,90,70,25);
 		rCalLibro = new JRadioButton("Calificación");
 		rCalLibro.setBounds(270,90,95,25);
-		//grupoBusqueda.add(rCalLibro);grupoBusqueda.add(rGenLibro);grupoBusqueda.add(rNomLibro);
+		grupoBusqueda.add(rCalLibro);grupoBusqueda.add(rGenLibro);grupoBusqueda.add(rNomLibro);
 		
 		//Cuadro de entrada de texto para busqueda
 		cuadroBusLibro = new JTextField();
