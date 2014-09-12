@@ -375,10 +375,10 @@ public class VentanaArticulos {
 		String hilera= cuadroBusLibro.getText();
 		//System.out.println(hilera);
 		String palabra= null;
+		cargarNombre();
+		ordenarLista(cantArtic);
 		//Si el cuadro de búsqueda no tiene escrito nada
 		if(hilera.equals("")==true){
-			cargarNombre();
-			ordenarLista(cantArtic);
 			return;
 		}
 		while(i<cantArtic){

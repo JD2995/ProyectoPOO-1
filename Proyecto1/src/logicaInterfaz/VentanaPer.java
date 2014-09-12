@@ -1,7 +1,4 @@
 package logicaInterfaz;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,7 +9,6 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import logicaInterfaz.VentanaArticulos.ModeloDatos;
 import logicaPrograma.Personas;
 
 public class VentanaPer {
@@ -308,10 +304,11 @@ public class VentanaPer {
 		String hilera= cuadroBusc.getText();
 		//System.out.println(hilera);
 		String palabra= null;
+		cargarNombre();
+		ordenarLista(cantPers);
 		//Si el cuadro de búsqueda no tiene escrito nada
 		if(hilera.equals("")==true){
-			cargarNombre();
-			ordenarLista(cantPers);
+			
 			return;
 		}
 		while(i<cantPers){
@@ -402,6 +399,7 @@ public class VentanaPer {
 		grupo.add(rNombre);grupo.add(rApellido1);grupo.add(rApellido2);
 	}
 	
+	@SuppressWarnings("serial")
 	//Clase para los objetos de la tabla de articulos
 		class ModeloDatos extends AbstractTableModel{
 			Object datos[][]= new Object[120][3];
