@@ -38,8 +38,6 @@ public class VentanaArticulos {
 	private JFrame vArticulos = null;
 	private ModeloDatos nombreLista= new ModeloDatos();
 	private JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
-	//private ModeloDatos nombreListaPrestar= new ModeloDatos();
-	private JTable tablaPrestar = new JTable(nombreLista);
 	private ListSelectionModel cellSelectionModel= tabla.getSelectionModel();
 	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar, botonPrestar;
 	private JTextField cuadroBusLibro;
@@ -50,6 +48,10 @@ public class VentanaArticulos {
 	private Image newimg= null;
 	private ImageIcon iconImagen= null;
 	private JLabel lImagen;
+	private ModeloDatos nombreLis = new ModeloDatos();
+	private JTable tablePrestar = new JTable(nombreLis);
+	private ListSelectionModel cellSelection= tablePrestar.getSelectionModel();
+	
 	
 	//DEFINICION DE METODOS
 	
@@ -543,8 +545,25 @@ public class VentanaArticulos {
 	public void prestar(int numArtic){
 		JFrame vPrestar = new JFrame("Prestar Articulo");
 		
+		//Modificación de los headers de la tabla
+		JTableHeader tableh = tablePrestar.getTableHeader();
+		TableColumnModel tablecm = tableh.getColumnModel();
+		TableColumn tablec = tablecm.getColumn(0);
+		tablec.setHeaderValue("Nombre");
+		tablec = tablecm.getColumn(1);
+		tablec.setHeaderValue("Apellido 1");
+		tablec = tablecm.getColumn(2);
+		tablec.setHeaderValue("Apellido 2");
+		tableh.repaint();
+		
+		cargarNombre();
+		//ordenarLista(cantPers);
+		
+		JScrollPane barraDesplazamiento1 = new JScrollPane(tabla);
+		barraDesplazamiento1.setBounds(150,130,500,260);
 		
 		
+		vPrestar.add(barraDesplazamiento1);
 		
 		
 		vPrestar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
