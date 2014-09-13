@@ -1,7 +1,9 @@
 package logicaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -116,6 +118,35 @@ public class VentanaPer {
 		cantPers= i;		
 	}
 	
+	//metodo que permite escribir unicamente letras
+	public void soloLetras(JTextField a){
+		a.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e){
+				char c = e.getKeyChar();
+				if (!Character.isLetter(c)){
+					//gettoolkit().beep();
+					e.consume();
+				}
+				
+			}		
+		});
+	}
+	
+	//metodo que permite escribir unicamente números
+	public void soloNumeros(JTextField a){
+		a.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e){
+				char c = e.getKeyChar();
+				if (c<'0' || c>'9'){
+					//gettoolkit().beep();
+					e.consume();
+				}
+				
+			}		
+		});
+	}
+	
+	
 	
 	/*Descripción: Función que maneja la ventana para agregar una persona
 	 * Entrada: Un int, si es 0 significa que va a agregar una nueva personas, sino es el número de persona a editar
@@ -161,17 +192,22 @@ public class VentanaPer {
 			
 		}
 		//Colocación de los de cuadros de entrada
+		
 		espacio1= new JTextField();
 		espacio1.setBounds(100,20,200,20);
+		soloLetras(espacio1);
 		if(numPer!=-1) espacio1.setText(Lista[indLista[numPer]].getNombre());
 		espacio2= new JTextField();
 		espacio2.setBounds(100,55,200,20);
+		soloLetras(espacio2);
 		if(numPer!=-1) espacio2.setText(Lista[indLista[numPer]].getApellido1());
 		espacio3= new JTextField();
 		espacio3.setBounds(100,90,200,20);
+		soloLetras(espacio3);
 		if(numPer!=-1) espacio3.setText(Lista[indLista[numPer]].getApellido2());
 		espacio4= new JTextField();
 		espacio4.setBounds(100,125,200,20);
+		soloNumeros(espacio4);
 		if(numPer!=-1) espacio4.setText(Integer.toString(Lista[indLista[numPer]].getTelefono()));
 		espacio5= new JTextField();
 		espacio5.setBounds(100,160,200,20);

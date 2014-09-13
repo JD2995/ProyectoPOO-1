@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.CopyOption;
@@ -172,6 +173,35 @@ public class VentanaArticulos {
 		cantArtic= i;		
 	}
 	
+	
+	//metodo que permite escribir unicamente letras
+	public void soloLetras(JTextField a){
+		a.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e){
+				char c = e.getKeyChar();
+				if (!Character.isLetter(c)){
+					//gettoolkit().beep();
+					e.consume();
+				}
+				
+			}		
+		});
+	}
+	
+	//metodo que permite escribir unicamente números
+	public void soloNumeros(JTextField a){
+		a.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e){
+				char c = e.getKeyChar();
+				if (c<'0' || c>'9'){
+					//gettoolkit().beep();
+					e.consume();
+				}
+				
+			}		
+		});
+	}
+	
 	private void ventanaArticulos(int numArtic){
 		JLabel label1,label2,label3,label4,label5,label6,label7,label8;
 		JLabel lImagen;
@@ -225,29 +255,36 @@ public class VentanaArticulos {
 		espacio[0]= new JTextField();
 		if(numArtic!= -1) espacio[0].setText(Lista[indLista[numArtic]].getNombre()); 
 		espacio[0].setBounds(220,13,200,20);
+		soloLetras(espacio[0]);
 		espacio[1]= new JTextField();
 		if(numArtic!= -1) espacio[1].setText(Lista[indLista[numArtic]].getGenero());
 		espacio[1].setBounds(220,48,200,20);
+		soloLetras(espacio[1]);
 		espacio[2]= new JTextField();
 		if(numArtic!= -1) espacio[2].setText(Integer.toString(Lista[indLista[numArtic]].getCalificacion()));
 		espacio[2].setBounds(220,83,200,20);
+		soloNumeros(espacio[2]);
 		espacio[3]= new JTextField();
 		if(numArtic!= -1) espacio[3].setText(Integer.toString(Lista[indLista[numArtic]].getCantidad()));
 		espacio[3].setBounds(220,118,200,20);
+		soloNumeros(espacio[3]);
 		espacio[4]= new JTextField(); 
 		if(numArtic!= -1 && modo == 0) espacio[4].setText(((Libros) Lista[indLista[numArtic]]).getAutor()); 
 		if(numArtic!= -1 && modo == 1) espacio[4].setText(((Revista) Lista[indLista[numArtic]]).getEditorial());
 		if(numArtic!= -1 && modo == 2) espacio[4].setText(((Pelicula) Lista[indLista[numArtic]]).getDirector()); 
 		espacio[4].setBounds(220,188,200,20);
+		soloLetras(espacio[4]);
 		espacio[5]= null;
 		if(modo == 0 || modo == 1) espacio[5]= new JTextField();
 		if(numArtic!= -1 && modo == 0) espacio[5].setText(((Libros) Lista[indLista[numArtic]]).getEditorial());
 		if(numArtic!= -1 && modo == 2) espacio[5].setText(((Pelicula) Lista[indLista[numArtic]]).getGenero());
 		espacio[5].setBounds(220, 223, 200, 20);
+		soloLetras(espacio[5]);
 		espacio[6]= null;
 		if(modo == 0) espacio[6]= new JTextField();
 		if(numArtic!= -1 && modo == 0) espacio[6].setText(((Libros) Lista[indLista[numArtic]]).getEdicion());
 		espacio[6].setBounds(220,258,200,20);
+		soloLetras(espacio[6]);
 		//Colocación de botones
 		botonImagen= new JButton("Explorar");
 		botonImagen.setBounds(220,153,100,20);
@@ -497,7 +534,7 @@ public class VentanaArticulos {
 		JFrame vPrestar = new JFrame("Prestar Articulo");
 		
 		
-	
+		
 		
 		
 		vPrestar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
