@@ -16,6 +16,8 @@ public class Personas {
 	private int Telefono;	//Número de teléfono de la persona
 	private String Correo;		//Direccion de correo electrónico
 	private int Categoria;	//0 es estudiante. 1 es colega y 2 es familiar
+	private Articulo articuloPrestado;
+	private boolean poseeArticulo;
 	
 	
 	//DECLARACIÓN DE MÉTODOS

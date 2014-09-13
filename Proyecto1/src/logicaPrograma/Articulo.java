@@ -11,6 +11,7 @@ public abstract class Articulo {
 	protected int calificacion;
 	protected int cantidad;
 	protected String nImagen;	//Contiene la ruta de la imagen a cargar
+	protected boolean isPrestado;
 	
 	//DEFINICION DE METODOS
 	
@@ -43,6 +44,13 @@ public abstract class Articulo {
 	}
 	public String getNImagen(){
 		return this.nImagen;
+	}
+	
+	public boolean getIsPrestado() {
+		return isPrestado;
+	}
+	public void setPrestado(boolean isPrestado) {
+		this.isPrestado = isPrestado;
 	}
 	
 	public void prestar(){
@@ -223,4 +231,5 @@ public abstract class Articulo {
 		archivo.delete();	//Elimina el archivo original
 		archivo1.renameTo(archivo);		//Renombra el archivo auxiliar con el del original
 	}
-}
+	
+} // fin clase

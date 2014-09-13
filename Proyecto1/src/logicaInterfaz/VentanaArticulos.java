@@ -25,6 +25,7 @@ import logicaPrograma.Pelicula;
 import logicaPrograma.Libros;
 import logicaPrograma.Personas;
 import logicaPrograma.Revista;
+import logicaInterfaz.VentanaPer;
 
 public class VentanaArticulos {
 	//DEFINICION DE ATRIBUTOS
@@ -35,8 +36,10 @@ public class VentanaArticulos {
 	private JFrame vArticulos = null;
 	private ModeloDatos nombreLista= new ModeloDatos();
 	private JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
+	//private ModeloDatos nombreListaPrestar= new ModeloDatos();
+	private JTable tablaPrestar = new JTable(nombreLista);
 	private ListSelectionModel cellSelectionModel= tabla.getSelectionModel();
-	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar;
+	private JButton botonAgregar, botonEditar, botonEliminar, botonBuscar, botonImportar, botonPrestar;
 	private JTextField cuadroBusLibro;
 	private JRadioButton rNomLibro, rGenLibro,rCalLibro;
 	private ButtonGroup grupoBusqueda = new ButtonGroup();
@@ -490,6 +493,22 @@ public class VentanaArticulos {
 		vImportar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
 	}
 	
+	public void prestar(int numArtic){
+		JFrame vPrestar = new JFrame("Prestar Articulo");
+		
+		
+	
+		
+		
+		vPrestar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+		vPrestar.setSize(650,450);
+		vPrestar.setVisible(true);
+		vPrestar.setResizable(false);
+		
+		
+	}
+	
+	
 	/*Descripción: Funcion que coloca los atributos de los botones
 	 *Entrada: Ninguna
 	 *Salida: Ninguna
@@ -545,6 +564,19 @@ public class VentanaArticulos {
 				buscarLista();
 			}
 		});
+		
+		botonPrestar= new JButton("Prestar");
+		botonPrestar.setBounds(10,395,125,25);
+		//ImageIcon imageEditar= new ImageIcon("change.gif");
+		//botonPrestar.setIcon(imageEditar);
+		botonPrestar.setMnemonic(KeyEvent.VK_I);
+		botonPrestar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				prestar(tabla.getSelectedRow());
+			}
+		});
+		
+		
 	}
 	
 	//Clase para los objetos de la tabla de articulos
@@ -556,11 +588,11 @@ public class VentanaArticulos {
 			return datos[0].length;
 		}
 		public int getRowCount() {
-			// TODO Auto-generated method stub
+			
 			return datos.length;
 		}
 		public Object getValueAt(int fil, int col) {
-			// TODO Auto-generated method stub
+			
 			return (datos[fil][col]);
 		}
 		public void setValueAt(int fil, int col,String hilera){
@@ -658,6 +690,7 @@ public class VentanaArticulos {
 		ventana.add(botonEditar);
 		ventana.add(botonEliminar);
 		ventana.add(botonImportar);
+		ventana.add(botonPrestar);
 		ventana.add(cuadroImage);
 		ventana.add(cuadroBusLibro);
 		ventana.add(botonBuscar);
@@ -667,7 +700,7 @@ public class VentanaArticulos {
 		
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
-		ventana.setSize(675,450);	//Tamaño de la ventana
+		ventana.setSize(675,480);	//Tamaño de la ventana
 		ventana.setVisible(true);
 		ventana.setResizable(false);
 	}
