@@ -2,6 +2,7 @@ package logicaInterfaz;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -175,18 +176,22 @@ public class VentanaArticulos {
 	
 	
 	//metodo que permite escribir unicamente letras
-	public void soloLetras(JTextField a){
-		a.addKeyListener(new KeyAdapter(){
-			public void keyTyped(KeyEvent e){
-				char c = e.getKeyChar();
-				if (!Character.isLetter(c)){
-					//gettoolkit().beep();
-					e.consume();
-				}
-				
-			}		
-		});
-	}
+		public void soloLetras(JTextField a){
+			a.addKeyListener(new KeyAdapter(){
+				public void keyTyped(KeyEvent e){
+					char c = e.getKeyChar();
+					if (!Character.isLetter(c)){
+						int k = (int)c;
+						if (k==8){
+							e.consume();
+						}
+						else{
+						Toolkit.getDefaultToolkit().beep();
+						e.consume(); }
+					}
+				}		
+			});
+		}
 	
 	//metodo que permite escribir unicamente números
 	public void soloNumeros(JTextField a){
@@ -194,8 +199,13 @@ public class VentanaArticulos {
 			public void keyTyped(KeyEvent e){
 				char c = e.getKeyChar();
 				if (c<'0' || c>'9'){
-					//gettoolkit().beep();
-					e.consume();
+					int k = (int)c;
+					if (k==8){
+						e.consume();
+					}
+					else {
+					Toolkit.getDefaultToolkit().beep();
+					e.consume(); }
 				}
 				
 			}		

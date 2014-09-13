@@ -124,8 +124,13 @@ public class VentanaPer {
 			public void keyTyped(KeyEvent e){
 				char c = e.getKeyChar();
 				if (!Character.isLetter(c)){
-					//gettoolkit().beep();
-					e.consume();
+					int k = (int)c;
+					if (k==8){
+						e.consume();
+					}
+					else{
+					Toolkit.getDefaultToolkit().beep();
+					e.consume(); }
 				}
 				
 			}		
@@ -138,8 +143,13 @@ public class VentanaPer {
 			public void keyTyped(KeyEvent e){
 				char c = e.getKeyChar();
 				if (c<'0' || c>'9'){
-					//gettoolkit().beep();
-					e.consume();
+					int k = (int)c;
+					if (k==8){
+						e.consume();
+					}
+					else {
+					Toolkit.getDefaultToolkit().beep();
+					e.consume(); }
 				}
 				
 			}		
