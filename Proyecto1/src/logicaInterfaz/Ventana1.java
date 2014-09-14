@@ -17,6 +17,11 @@ public class Ventana1{
 		ventanaAbierta= false;
 	}
 	
+	private void consPrest(){
+		VentanaPrestamos ventana2= new VentanaPrestamos();
+		ventanaAbierta= false;
+	}
+	
 	public Ventana1(String title){
 		JFrame ventana= new JFrame(title);
 		//Definición de los botones
@@ -59,6 +64,15 @@ public class Ventana1{
 		Btop.setBounds(20,256,500,50);
 		Btop.setIcon(ImageTop);
 		Brango.setBounds(20,308,500,50);
+		Bprestamos.setMnemonic(KeyEvent.VK_I);
+		Bprestamos.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(ventanaAbierta==false){
+					ventanaAbierta= true;
+					consPrest();
+				}
+			}
+		});
 		Brango.setIcon(ImageRango);
 		ventana.setLayout(null);
 		ventana.add(Blibros);

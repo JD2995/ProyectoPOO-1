@@ -487,10 +487,6 @@ public class VentanaPer {
 		ordenarLista(cantPers);
 		JScrollPane barraDesplazamiento = new JScrollPane(tabla);
 		barraDesplazamiento.setBounds(150,130,500,260); 
-		//list= new JList(nombreLista);
-		//list.setSelectedIndex(0);
-		//list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);		
-		//JScrollPane barraDesplazamiento = new JScrollPane(list);
 		
 		//Cuadro de entrada de texto para busqueda
 		cuadroBusc= new JTextField();
@@ -508,7 +504,6 @@ public class VentanaPer {
 		ventana.add(rNombre);
 		ventana.add(rApellido1);
 		ventana.add(rApellido2);
-		//ventana.add(list);
 		ventana.add(barraDesplazamiento);
 		ventana.add(cuadroBusc);
 		
