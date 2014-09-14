@@ -559,10 +559,10 @@ public class VentanaArticulos {
 		cargarNombre();
 		//ordenarLista(cantPers);
 		
-		JScrollPane barraDesplazamiento1 = new JScrollPane(tabla);
+		JScrollPane barraDesplazamiento1 = new JScrollPane(tablePrestar);
 		barraDesplazamiento1.setBounds(150,130,500,260);
 		
-		
+		vPrestar.setLayout(null);
 		vPrestar.add(barraDesplazamiento1);
 		
 		
