@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
@@ -32,7 +33,6 @@ public class VentanaPrestamos {
 	private int cantPrestamos= 0;	//Contador de préstamos en la tabla
 	private ModeloDatos nombreLista= new ModeloDatos();
 	private JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
-	private ListSelectionModel cellSelectionModel= tabla.getSelectionModel();
 	private Prestamo Lista[]= new Prestamo[120];
 	private int indLista[]= new int[120]; 
 	private JButton botonDevolver, botonDia,botonBuscar;
@@ -70,7 +70,86 @@ public class VentanaPrestamos {
 	
 	//No implementado aun
 	private void filtrarLista(){
+		int i=0;
+		int j=0;
+		String hilera= cuadroBusc.getText();
+		String palabra= null;
+		String aux= null;
+		Personas tempPer= null;
+		Articulo tempArtic= null;
 		
+		cargarNombre();
+		//ordenarLista(cantPrestamos);
+		//Si el cuadro de búsqueda no tiene escrito nada
+		if(hilera.equals("")==true){
+			return;
+		}
+		while(i<cantPrestamos){
+			if(i == cantPrestamos) break;
+			//Si la búsqueda es de nombre de la persona
+			if(rNombre.isSelected()==true){
+				tempPer= new Personas();
+				tempPer.Obtener(Lista[i].getNumeroPersona(), "Reg_Pers.txt");
+				palabra= tempPer.getNombre()+" "+tempPer.getApellido1();
+			}
+			//Si la búsqueda es de nombre del artículo
+			else if(rArticulo.isSelected()==true){
+				if(Lista[i].getTipoArticulo().equals("Libro")) {
+					tempArtic= new Libros();
+					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Libros.txt");
+				}
+				else if(Lista[i].getTipoArticulo().equals("Revista")) {
+					tempArtic= new Revista();
+					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Revistas.txt");
+				}
+				else if(Lista[i].getTipoArticulo().equals("Pelicula")){
+					tempArtic= new Pelicula();
+					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Peliculas.txt");
+				}
+				palabra= tempArtic.getNombre();
+			}
+			//Si la búsqueda es de tipo del artículo
+			else if(rTipo.isSelected()==true) palabra= Lista[i].getTipoArticulo();
+			if(hilera.startsWith(palabra)==true){
+				//Obtención y carga del nombre del artículo
+				if(Lista[i].getTipoArticulo().equals("Libro")) {
+					tempArtic= new Libros();
+					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Libros.txt");
+				}
+				else if(Lista[i].getTipoArticulo().equals("Revista")) {
+					tempArtic= new Revista();
+					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Revistas.txt");
+				}
+				else if(Lista[i].getTipoArticulo().equals("Pelicula")){
+					tempArtic= new Pelicula();
+					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Peliculas.txt");
+				}
+				aux= tempArtic.getNombre();
+				nombreLista.setValueAt(j, 0, aux);
+				//Obtención y carga del tipo de Artículo
+				nombreLista.setValueAt(j, 1, Lista[i].getTipoArticulo());
+				//Obtención y carga del nombre de Persona
+				tempPer= new Personas();
+				tempPer.Obtener(Lista[i].getNumeroPersona(), "Reg_Pers.txt");
+				aux= tempPer.getNombre()+" "+tempPer.getApellido1();
+				nombreLista.setValueAt(j, 2, aux);
+				//Obtención y carga de la cantidad de días del préstamo
+				nombreLista.setValueAt(j, 3, Integer.toString(Lista[i].getCantDias()));
+				indLista[j]= i;
+				//System.out.println(Lista);
+				j++;
+			}
+			i++;
+		}
+		cantPrestamos= j;
+		while(j<120){
+			nombreLista.setValueAt(j, 0, "");
+			nombreLista.setValueAt(j, 1, "");
+			nombreLista.setValueAt(j, 2, "");
+			nombreLista.setValueAt(j, 3, "");
+			indLista[j]=0;
+			j++;
+		}
 	}
 	
 	/*Descripción: Función que elimina del registro un prestamo ya que fue devuelto
@@ -156,6 +235,8 @@ public class VentanaPrestamos {
 	private void colocarBotones(){
 		botonDevolver= new JButton("Devolver");
 		botonDevolver.setBounds(10,130,125,25);
+		ImageIcon imageDevolver= new ImageIcon("devolver.gif");
+		botonDevolver.setIcon(imageDevolver);
 		botonDevolver.setMnemonic(KeyEvent.VK_I);
 		botonDevolver.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -164,6 +245,8 @@ public class VentanaPrestamos {
 		});
 		botonDia= new JButton("Pasar día");
 		botonDia.setBounds(10,161,125,25);
+		ImageIcon imageDia= new ImageIcon("day.gif");
+		botonDia.setIcon(imageDia);
 		botonDia.setMnemonic(KeyEvent.VK_1);
 		botonDia.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -178,15 +261,16 @@ public class VentanaPrestamos {
 				filtrarLista();
 			}
 		});
-		rNombre= new JRadioButton("Nombre",true);
-		rNombre.setBounds(150, 95, 70, 25);
-		rArticulo= new JRadioButton("Apellido1");
-		rArticulo.setBounds(220,95,80,25);
-		rTipo= new JRadioButton("Apellido2");
-		rTipo.setBounds(300,95,80,25);
+		rNombre= new JRadioButton("Persona",true);
+		rNombre.setBounds(150, 95, 80, 25);
+		rArticulo= new JRadioButton("Articulo");
+		rArticulo.setBounds(225,95,80,25);
+		rTipo= new JRadioButton("Tipo");
+		rTipo.setBounds(305,95,70,25);
 		grupoBusqueda.add(rNombre);grupoBusqueda.add(rArticulo);grupoBusqueda.add(rTipo);
 	}
 	
+	@SuppressWarnings("serial")
 	public class MiRender extends DefaultTableCellRenderer
 	{
 	   public Component getTableCellRendererComponent(JTable table,
@@ -276,6 +360,7 @@ public class VentanaPrestamos {
 		ventana.add(barraDesplazamiento);
 		ventana.add(botonDevolver);
 		ventana.add(botonDia);
+		ventana.add(botonBuscar);
 		ventana.add(rNombre);
 		ventana.add(rArticulo);
 		ventana.add(rTipo);

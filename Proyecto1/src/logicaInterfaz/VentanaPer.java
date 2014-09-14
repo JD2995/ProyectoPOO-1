@@ -354,7 +354,6 @@ public class VentanaPer {
 		ordenarLista(cantPers);
 		//Si el cuadro de búsqueda no tiene escrito nada
 		if(hilera.equals("")==true){
-			
 			return;
 		}
 		while(i<cantPers){
