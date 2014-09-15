@@ -57,6 +57,19 @@ public class Personas {
 	public void setCategoria(int num){
 		Categoria= num;
 	}
+	public Articulo getArticuloPrestado() {
+		return articuloPrestado;
+	}
+	public void setArticuloPrestado(Articulo articuloPrestado) {
+		this.articuloPrestado = articuloPrestado;
+	}
+	public boolean isPoseeArticulo() {
+		return poseeArticulo;
+	}
+	public void setPoseeArticulo(boolean poseeArticulo) {
+		this.poseeArticulo = poseeArticulo;
+	}
+	
 	/*Descripcion: Función que observa si en el registro existe una persona registrada con un dado número
 	 * Entrada: Número de persona a buscar
 	 * Salida: True si existe la persona, false si no existe

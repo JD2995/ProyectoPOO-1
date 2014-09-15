@@ -26,6 +26,7 @@ import logicaPrograma.Articulo;
 import logicaPrograma.Pelicula;
 import logicaPrograma.Libros;
 import logicaPrograma.Personas;
+import logicaPrograma.Prestamo;
 import logicaPrograma.Revista;
 import logicaInterfaz.VentanaPer;
 
@@ -121,6 +122,17 @@ public class VentanaArticulos {
 		}
 	}
 	
+	private boolean isPrestado(int numArtic){
+		int i=0;
+		Prestamo tempPrestamo= new Prestamo();
+		while(true){
+			if(tempPrestamo.Obtener(i, "Prestamos.txt") == false) break;
+			if(tempPrestamo.getNumeroArticulo()==numArtic)return true;
+			i++;
+		}
+		return false;
+	}
+	
 	/*Descripción: Función que carga en los arrays la información encontrada en el registro
 	 * Entrada: Ninguna
 	 * Salida: Ninguna
@@ -154,6 +166,7 @@ public class VentanaArticulos {
 			Lista[i].setCalificacion(temp.getCalificacion());
 			Lista[i].setCantidad(temp.getCantidad());
 			Lista[i].setNImagen(temp.getNImagen());
+			Lista[i].setPrestado(isPrestado(i));
 			if(modo == 0){
 				((Libros) Lista[i]).setAutor(((Libros)temp).getAutor());
 				((Libros) Lista[i]).setEditorial(((Libros)temp).getEditorial());
@@ -461,7 +474,40 @@ public class VentanaArticulos {
 		}
 	}
 	
-	
+	/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
+	 * debido a que tiene un articulo prestado
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
+	private void mensajeError(){
+		JFrame vEliminar= new JFrame("Mensaje de Error");
+		JLabel mensaje= new JLabel("Error, el artículo no puede ser eliminado");
+		JLabel mensaje1= new JLabel("El artículo se encuentra prestado");
+		JButton aceptar= new JButton("Aceptar");
+		
+		mensaje.setBounds(30,20,300,25);
+		mensaje.setHorizontalAlignment(SwingConstants.CENTER);
+		mensaje1.setBounds(30, 45, 300, 25);
+		mensaje1.setHorizontalAlignment(SwingConstants.CENTER);
+		aceptar.setBounds(135,80,90,25);
+		aceptar.setMnemonic(KeyEvent.VK_I);
+		aceptar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				vEliminar.dispose();
+				return;
+			}
+		});
+		
+		vEliminar.setLayout(null);
+		vEliminar.add(mensaje);
+		vEliminar.add(mensaje1);
+		vEliminar.add(aceptar);
+		
+		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+		vEliminar.setSize(360,150);
+		vEliminar.setVisible(true);
+		vEliminar.setResizable(false);
+	}
 	
 	
 	
@@ -609,7 +655,10 @@ public class VentanaArticulos {
 		botonEliminar.setMnemonic(KeyEvent.VK_I);
 		botonEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				ventanaEliminar(tabla.getSelectedRow());
+				if(Lista[indLista[tabla.getSelectedRow()]].getIsPrestado() == true){
+					mensajeError();
+				}
+				else ventanaEliminar(tabla.getSelectedRow());
 			}
 		});
 		botonImportar= new JButton("Importar");

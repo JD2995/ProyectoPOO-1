@@ -206,24 +206,24 @@ public class VentanaPrestamos {
 			//Obteniendo el nombre del artículo
 			if(temp.getTipoArticulo().equals("Libro")) {
 				tempArtic= new Libros();
-				tempArtic.Obtener(temp.getNumeroArticulo(), "Libros.txt");
+				tempArtic.Obtener(temp.getNumeroArticulo()+1, "Libros.txt");
 				palabra= tempArtic.getNombre();
 			}
 			else if(temp.getTipoArticulo().equals("Revista")){
 				tempArtic= new Revista();
-				tempArtic.Obtener(temp.getNumeroArticulo(), "Revistas.txt");
+				tempArtic.Obtener(temp.getNumeroArticulo()+1, "Revistas.txt");
 				palabra= tempArtic.getNombre();
 			}
 			else if(temp.getTipoArticulo().equals("Pelicula")){
 				tempArtic= new Pelicula();
-				tempArtic.Obtener(temp.getNumeroArticulo(), "Peliculas.txt");
+				tempArtic.Obtener(temp.getNumeroArticulo()+1, "Peliculas.txt");
 				palabra= tempArtic.getNombre();
 			}
 			nombreLista.setValueAt(i, 0, palabra);
 			nombreLista.setValueAt(i, 1, temp.getTipoArticulo());
 			//Obteniendo el nombre de la persona
 			tempPer= new Personas();
-			tempPer.Obtener(temp.getNumeroPersona(), "Reg_Pers.txt");
+			tempPer.Obtener(temp.getNumeroPersona()+1, "Reg_Pers.txt");
 			palabra= tempPer.getNombre()+" "+tempPer.getApellido1();
 			nombreLista.setValueAt(i, 2, palabra);
 			nombreLista.setValueAt(i, 3, Integer.toString(temp.getCantDias()));

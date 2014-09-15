@@ -12,6 +12,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import logicaPrograma.Personas;
+import logicaPrograma.Prestamo;
 
 public class VentanaPer {
 	//DECLARACIÓN DE ATRIBUTOS
@@ -90,6 +91,17 @@ public class VentanaPer {
 		}
 	}
 	
+	private boolean tienePrestamo(int numPer){
+		int i=0;
+		Prestamo tempPrestamo= new Prestamo();
+		while(true){
+			if(tempPrestamo.Obtener(i, "Prestamos.txt") == false) break;
+			if(tempPrestamo.getNumeroPersona()==numPer)return true;
+			i++;
+		}
+		return false;
+	}
+	
 	/*Descripción: Función que carga en los arrays la información encontrada en el registro
 	 * Entrada: Ninguna
 	 * Salida: Ninguna
@@ -109,6 +121,7 @@ public class VentanaPer {
 			Lista[i].setCorreo(temp.getCorreo());
 			Lista[i].setTelefono(temp.getTelefono());
 			Lista[i].setCategoria(temp.getCategoria());
+			Lista[i].setPoseeArticulo(tienePrestamo(i));
 			indLista[i]= i;
 			nombreLista.setValueAt(i, 0, temp.getNombre());
 			nombreLista.setValueAt(i, 1, temp.getApellido1());
@@ -327,6 +340,41 @@ public class VentanaPer {
 		vEliminar.setResizable(false);
 	}
 	
+	/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
+	 * debido a que tiene un articulo prestado
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
+	private void mensajeError(){
+		JFrame vEliminar= new JFrame("Mensaje de Error");
+		JLabel mensaje= new JLabel("Error, la persona no puede ser eliminada");
+		JLabel mensaje1= new JLabel("Posee un artículo prestado");
+		JButton aceptar= new JButton("Aceptar");
+		
+		mensaje.setBounds(30,20,300,25);
+		mensaje.setHorizontalAlignment(SwingConstants.CENTER);
+		mensaje1.setBounds(30, 45, 300, 25);
+		mensaje1.setHorizontalAlignment(SwingConstants.CENTER);
+		aceptar.setBounds(135,80,90,25);
+		aceptar.setMnemonic(KeyEvent.VK_I);
+		aceptar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				vEliminar.dispose();
+				return;
+			}
+		});
+		
+		vEliminar.setLayout(null);
+		vEliminar.add(mensaje);
+		vEliminar.add(mensaje1);
+		vEliminar.add(aceptar);
+		
+		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+		vEliminar.setSize(360,150);
+		vEliminar.setVisible(true);
+		vEliminar.setResizable(false);
+	}
+	
 	private void ventanaImportar(){
 		Personas humano= new Personas();
 		
@@ -414,7 +462,9 @@ public class VentanaPer {
 		botonEliminar.setMnemonic(KeyEvent.VK_I);
 		botonEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				ventanaEliminar(tabla.getSelectedRow());
+				//Si tiene un articulo prestado
+				if(Lista[indLista[tabla.getSelectedRow()]].isPoseeArticulo()==true) mensajeError(); 
+				else ventanaEliminar(tabla.getSelectedRow());
 			}
 		});
 		botonBuscar= new JButton("Buscar");
