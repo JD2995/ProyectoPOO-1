@@ -1,6 +1,7 @@
 package logicaInterfaz;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -33,9 +34,12 @@ import logicaInterfaz.VentanaPer;
 public class VentanaArticulos {
 	//DEFINICION DE ATRIBUTOS
 	private int modo=0;		//0 si está en Libros, 1 si está en Revistas, 2 si esté en Películas
-	private Articulo Lista[]= new Articulo[120];
+	private Articulo Lista[]= new Articulo[120];	//Vector con articulos
 	private int indLista[]= new int[120];	//Vector con el índice de los nombres de Lista
 	private int cantArtic= 0;	//Contador de articulos en la tabla
+	private Personas ListaPers[]= new Personas[120];	//Vector con personas para prestar
+	private int indListaPers[]= new int[120];	//Vector con el índice de los nombres de las personas
+	private int cantPers=0;
 	private JFrame vArticulos = null;
 	private ModeloDatos nombreLista= new ModeloDatos();
 	private JTable tabla= new JTable(nombreLista);	//Tabla con los datos de los articulos
@@ -49,7 +53,7 @@ public class VentanaArticulos {
 	private Image newimg= null;
 	private ImageIcon iconImagen= null;
 	private JLabel lImagen;
-	private ModeloDatos nombreLis = new ModeloDatos();
+	private ModeloDatos nombreLis = new ModeloDatos(3);
 	private JTable tablePrestar = new JTable(nombreLis);
 	private ListSelectionModel cellSelection= tablePrestar.getSelectionModel();
 	
@@ -131,6 +135,18 @@ public class VentanaArticulos {
 			i++;
 		}
 		return false;
+	}
+	
+	private int cantPrestado(int numArtic){
+		int i=0;
+		int cant=0;
+		Prestamo tempPrestamo= new Prestamo();
+		while(true){
+			if(tempPrestamo.Obtener(i, "Prestamos.txt") == false) break;
+			if(tempPrestamo.getNumeroArticulo()==numArtic) cant++;
+			i++;
+		}
+		return cant;
 	}
 	
 	/*Descripción: Función que carga en los arrays la información encontrada en el registro
@@ -479,10 +495,10 @@ public class VentanaArticulos {
 	 * Entrada: Ninguna
 	 * Salida: Ninguna
 	 */
-	private void mensajeError(){
+	private void mensajeError(String msg1, String msg2){
 		JFrame vEliminar= new JFrame("Mensaje de Error");
-		JLabel mensaje= new JLabel("Error, el artículo no puede ser eliminado");
-		JLabel mensaje1= new JLabel("El artículo se encuentra prestado");
+		JLabel mensaje= new JLabel(msg1);
+		JLabel mensaje1= new JLabel(msg2);
 		JButton aceptar= new JButton("Aceptar");
 		
 		mensaje.setBounds(30,20,300,25);
@@ -588,8 +604,71 @@ public class VentanaArticulos {
 		vImportar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
 	}
 	
+	private void CargarPersonas(){
+		Personas temp= new Personas();
+		int i= 0;
+		while(true){
+			//Obtiene en las clases sus atributos hasta que ya no encuentra
+			//más en disco
+			if(temp.Obtener(i+1, "Reg_Pers.txt") == false){break;}
+			ListaPers[i]= new Personas();
+			ListaPers[i].setNombre(temp.getNombre());
+			ListaPers[i].setApellido1(temp.getApellido1());
+			ListaPers[i].setApellido2(temp.getApellido2());
+			ListaPers[i].setCorreo(temp.getCorreo());
+			ListaPers[i].setTelefono(temp.getTelefono());
+			ListaPers[i].setCategoria(temp.getCategoria());
+			indListaPers[i]= i;
+			nombreLis.setValueAt(i, 0, temp.getNombre());
+			nombreLis.setValueAt(i, 1, temp.getApellido1());
+			nombreLis.setValueAt(i, 2, temp.getApellido2());
+			i++;
+		}
+		cantPers= i;
+	}
+	
+	private void ordenarPers(int cant){
+		int i=1;
+		int indAux;
+		String aux1,aux2,aux3;
+		
+		if(cant == 0 || cant == 1){ return;}
+		while(i<cant){
+			if(i == 0){
+				i++;
+			}
+			//Si el elemento anterior tiene un caracter menor que el elemento actual
+			else if(((String) nombreLis.getValueAt(i, 0)).charAt(0)< ((String) nombreLis.getValueAt(i-1, 0)).charAt(0) && i!= 0){
+				//Cambia posiciones en lista con nombres
+				aux1= (String) nombreLis.getValueAt(i, 0);
+				aux2= (String) nombreLis.getValueAt(i, 1);
+				aux3= (String) nombreLis.getValueAt(i, 2);
+				nombreLis.setValueAt(i, 0, (String) nombreLis.getValueAt(i-1, 0));
+				nombreLis.setValueAt(i, 1, (String) nombreLis.getValueAt(i-1, 1));
+				nombreLis.setValueAt(i, 2, (String) nombreLis.getValueAt(i-1, 2));
+				nombreLis.setValueAt(i-1, 0, aux1);
+				nombreLis.setValueAt(i-1, 1, aux2);
+				nombreLis.setValueAt(i-1, 2, aux3);
+				//Cambia posiciones en lista con índices
+				indAux= indListaPers[i];
+				indListaPers[i]= indListaPers[i-1];
+				indListaPers[i-1]= indAux;
+				i--;
+			}
+			else{
+				i++;
+			}
+		}
+	}
+	
 	public void prestar(int numArtic){
 		JFrame vPrestar = new JFrame("Prestar Articulo");
+		JButton prestar= new JButton("Prestar");
+		JLabel label= new JLabel("Cantidad disponible:");
+		JLabel  cantidad= new JLabel();
+		JLabel label2= new JLabel("Días del prestamo:");
+		JTextField inputDias= new JTextField();
+		int cantDisponible= Lista[indLista[numArtic]].getCantidad()-cantPrestado(indLista[numArtic]);
 		
 		//Modificación de los headers de la tabla
 		JTableHeader tableh = tablePrestar.getTableHeader();
@@ -602,14 +681,46 @@ public class VentanaArticulos {
 		tablec.setHeaderValue("Apellido 2");
 		tableh.repaint();
 		
-		cargarNombre();
-		//ordenarLista(cantPers);
+		CargarPersonas();
+		ordenarPers(cantPers);
 		
+		label.setBounds(10,130,125,25);
+		cantidad.setText(Integer.toString(cantDisponible));
+		cantidad.setBounds(10, 150, 125, 25);
+		cantidad.setForeground(Color.BLUE);
+		cantidad.setHorizontalAlignment(SwingConstants.CENTER);
 		JScrollPane barraDesplazamiento1 = new JScrollPane(tablePrestar);
-		barraDesplazamiento1.setBounds(150,130,500,260);
+		barraDesplazamiento1.setBounds(150,130,475,260);
+		prestar.setBounds(10, 231, 125, 25);
+		prestar.setMnemonic(KeyEvent.VK_I);
+		prestar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Prestamo temp= new Prestamo();
+				if(cantDisponible == 0) mensajeError("Error, el artículo no puede ser prestado","No hay suficiente cantidad");
+				else{
+					temp.setNumeroArticulo(indLista[numArtic]);
+					temp.setNumeroPersona(indListaPers[tablePrestar.getSelectedRow()]);
+					if(modo == 0) temp.setTipoArticulo("Libro");
+					else if(modo == 1) temp.setTipoArticulo("Revista");
+					else if(modo == 2) temp.setTipoArticulo("Pelicula");
+					temp.setCantDias(Integer.parseInt(inputDias.getText()));
+					temp.Agregar("Prestamos.txt");
+				}
+				vPrestar.dispose();
+			}
+		});
+		label2.setBounds(10,175,125,25);
+		inputDias.setBounds(10, 200, 125, 25);
+		inputDias.setText("1");
+		soloNumeros(inputDias);
 		
 		vPrestar.setLayout(null);
 		vPrestar.add(barraDesplazamiento1);
+		vPrestar.add(label);
+		vPrestar.add(label2);
+		vPrestar.add(prestar);
+		vPrestar.add(cantidad);
+		vPrestar.add(inputDias);
 		
 		
 		vPrestar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
@@ -656,7 +767,7 @@ public class VentanaArticulos {
 		botonEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(Lista[indLista[tabla.getSelectedRow()]].getIsPrestado() == true){
-					mensajeError();
+					mensajeError("Error, el artículo no puede ser eliminado","El artículo se encuentra prestado");
 				}
 				else ventanaEliminar(tabla.getSelectedRow());
 			}
@@ -697,7 +808,7 @@ public class VentanaArticulos {
 	//Clase para los objetos de la tabla de articulos
 	@SuppressWarnings("serial")
 	class ModeloDatos extends AbstractTableModel{
-		Object datos[][]= new Object[120][4];
+		Object datos[][]= null;
 
 		public int getColumnCount() {
 			return datos[0].length;
@@ -713,6 +824,14 @@ public class VentanaArticulos {
 		public void setValueAt(int fil, int col,String hilera){
 			datos[fil][col]= hilera;
 			fireTableDataChanged();
+		}
+		
+		ModeloDatos(){
+			datos= new Object[120][4];
+		}
+		
+		ModeloDatos(int num){
+			if(num == 3) datos= new Object [120][3];
 		}
 	}
 	
