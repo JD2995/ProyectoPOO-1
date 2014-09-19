@@ -1,7 +1,6 @@
 package logicaInterfaz;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -14,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Calendar;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -29,7 +29,6 @@ import logicaPrograma.Libros;
 import logicaPrograma.Personas;
 import logicaPrograma.Prestamo;
 import logicaPrograma.Revista;
-import logicaInterfaz.VentanaPer;
 
 public class VentanaArticulos {
 	//DEFINICION DE ATRIBUTOS
@@ -55,7 +54,6 @@ public class VentanaArticulos {
 	private JLabel lImagen;
 	private ModeloDatos nombreLis = new ModeloDatos(3);
 	private JTable tablePrestar = new JTable(nombreLis);
-	private ListSelectionModel cellSelection= tablePrestar.getSelectionModel();
 	
 	
 	//DEFINICION DE METODOS
@@ -142,8 +140,12 @@ public class VentanaArticulos {
 		int cant=0;
 		Prestamo tempPrestamo= new Prestamo();
 		while(true){
-			if(tempPrestamo.Obtener(i, "Prestamos.txt") == false) break;
-			if(tempPrestamo.getNumeroArticulo()==numArtic) cant++;
+			if(tempPrestamo.Obtener(i+1, "Prestamos.txt") == false) break;
+			else if(tempPrestamo.getNumeroArticulo()==numArtic) {
+				if(tempPrestamo.getTipoArticulo().equals("Libro") && modo == 0)cant++;
+				else if(tempPrestamo.getTipoArticulo().equals("Revista") && modo == 1)cant++;
+				else if(tempPrestamo.getTipoArticulo().equals("Pelicula") && modo == 2)cant++;
+			}
 			i++;
 		}
 		return cant;
@@ -211,7 +213,7 @@ public class VentanaArticulos {
 			a.addKeyListener(new KeyAdapter(){
 				public void keyTyped(KeyEvent e){
 					char c = e.getKeyChar();
-					if (!Character.isLetter(c)){
+					if (!Character.isLetter(c) && !Character.isSpaceChar(c)){
 						int k = (int)c;
 						if (k==8){
 							e.consume();
@@ -282,12 +284,12 @@ public class VentanaArticulos {
 		else if(modo == 2) label6= new JLabel("Director:");
 		label6.setBounds(110,185,100,30);
 		label6.setHorizontalAlignment(JLabel.RIGHT);
-		label7= null;
+		label7= new JLabel();
 		if(modo == 0) label7= new JLabel("Editorial:");
 		else if(modo == 2) label7= new JLabel("Género:");
 		label7.setBounds(110,220,100,30);
 		label7.setHorizontalAlignment(JLabel.RIGHT);
-		label8= null;
+		label8= new JLabel();
 		if(modo == 0) label8= new JLabel("Edición: ");
 		label8.setBounds(110,255,100,30);
 		label8.setHorizontalAlignment(JLabel.RIGHT);
@@ -316,17 +318,23 @@ public class VentanaArticulos {
 		espacio[4].setBounds(220,188,200,20);
 		soloLetras(espacio[4]);
 		espacio[5]= null;
-		if(modo == 0 || modo == 1) espacio[5]= new JTextField();
-		if(numArtic!= -1 && modo == 0) espacio[5].setText(((Libros) Lista[indLista[numArtic]]).getEditorial());
-		if(numArtic!= -1 && modo == 2) espacio[5].setText(((Pelicula) Lista[indLista[numArtic]]).getGenero());
-		espacio[5].setBounds(220, 223, 200, 20);
-		soloLetras(espacio[5]);
+		if(modo == 0 || modo == 2){
+			espacio[5]= new JTextField();
+			if(numArtic!= -1 && modo == 0) espacio[5].setText(((Libros) Lista[indLista[numArtic]]).getEditorial());
+			if(numArtic!= -1 && modo == 2) espacio[5].setText(((Pelicula) Lista[indLista[numArtic]]).getGenero());
+			espacio[5].setBounds(220, 223, 200, 20);
+			soloLetras(espacio[5]);
+		}		
 		espacio[6]= null;
-		if(modo == 0) espacio[6]= new JTextField();
-		if(numArtic!= -1 && modo == 0) espacio[6].setText(((Libros) Lista[indLista[numArtic]]).getEdicion());
-		espacio[6].setBounds(220,258,200,20);
-		soloLetras(espacio[6]);
+		if(modo == 0) {
+			espacio[6]= new JTextField();
+			if(numArtic!= -1) espacio[6].setText(((Libros) Lista[indLista[numArtic]]).getEdicion());
+			espacio[6].setBounds(220,258,200,20);
+			soloLetras(espacio[6]);
+		}
+		
 		//Colocación de botones
+		hileraImagen[0]= null;
 		botonImagen= new JButton("Explorar");
 		botonImagen.setBounds(220,153,100,20);
 		botonImagen.setMnemonic(KeyEvent.VK_1);
@@ -343,6 +351,8 @@ public class VentanaArticulos {
 			public void actionPerformed(ActionEvent e) {
 				Articulo objeto= null;
 				String palabra;
+				Path FROM= null;
+				Path TO= null;
 				
 				if(modo == 0)objeto= new Libros();
 				else if(modo == 1) objeto= new Revista();
@@ -360,32 +370,35 @@ public class VentanaArticulos {
 				if(modo == 0) ((Libros) objeto).setAutor(palabra);
 				else if(modo == 1) ((Revista) objeto).setEditorial(palabra);
 				else if(modo == 2) ((Pelicula) objeto).setDirector(palabra);
-				palabra= espacio[5].getText();
+				if(modo == 0 || modo == 2)palabra= espacio[5].getText();
 				if(modo == 0) ((Libros) objeto).setEditorial(palabra);
 				else if(modo == 2) ((Pelicula) objeto).setGenero(palabra);
-				palabra= espacio[6].getText();
+				if(modo == 0)palabra= espacio[6].getText();
 				if(modo == 0) ((Libros) objeto).setEdicion(palabra);
 				//Guardando en el proyecto la imagen de portada conseguida
-				Path FROM= Paths.get(hileraImagen[0]);
-				Path TO= null;
-				//Si es un articulo a editar
-				if(modo == 0 && numArtic!= -1) hileraImagen[1]="Libro"+indLista[numArtic]+"."+hileraImagen[0].substring(hileraImagen[0].length()-3, hileraImagen[0].length());
-				else if(modo == 1 && numArtic!= -1) hileraImagen[1]="Revista"+indLista[numArtic];
-				else if(modo == 2 && numArtic!= -1) hileraImagen[1]="Pelicula"+indLista[numArtic];
-				//Si es un articulo nuevo
-				cargarNombre();
-				ordenarLista(cantArtic);
-				if(modo == 0 && numArtic==-1) hileraImagen[1]="Libros"+cantArtic;
-				else if(modo == 1 && numArtic==-1) hileraImagen[1]="Revista"+cantArtic;
-				else if(modo == 2 && numArtic==-1) hileraImagen[1]= "Pelicula"+cantArtic;
-				TO= Paths.get(hileraImagen[1]);
-				CopyOption [] options= new CopyOption[]{
-					StandardCopyOption.REPLACE_EXISTING,
-					StandardCopyOption.COPY_ATTRIBUTES
-				};
-				try {
-					Files.copy(FROM, TO, options);
-				} catch (IOException e1) {}
+				hileraImagen[1]= null;
+				if(numArtic!=-1)hileraImagen[1]= Lista[indLista[numArtic]].getNImagen();
+				if(hileraImagen[0]!= null){
+					Calendar calendario= Calendar.getInstance();
+					int segundos= calendario.get(Calendar.SECOND);
+					FROM= Paths.get(hileraImagen[0]);
+					TO= null;
+					//Si es un articulo a editar
+					if(numArtic!= -1) hileraImagen[1]=espacio[0].getText()+segundos;
+					//Si es un articulo nuevo
+					cargarNombre();
+					ordenarLista(cantArtic);
+					
+					if(numArtic==-1) hileraImagen[1]=espacio[0].getText()+segundos;
+					TO= Paths.get(hileraImagen[1]);
+					CopyOption [] options= new CopyOption[]{
+						StandardCopyOption.REPLACE_EXISTING,
+						StandardCopyOption.COPY_ATTRIBUTES
+					};
+					try {
+						Files.copy(FROM, TO, options);
+					} catch (IOException e1) {}
+				}
 				objeto.setNImagen(hileraImagen[1]);		//Coloca la direccion de la imagen
 				//Realiza los cambios o inserción del nuevo elemento
 				if(numArtic==-1){
@@ -437,8 +450,8 @@ public class VentanaArticulos {
 		vArticulos.add(espacio[2]);
 		vArticulos.add(espacio[3]);
 		vArticulos.add(espacio[4]);
-		vArticulos.add(espacio[5]);
-		vArticulos.add(espacio[6]);
+		if(modo == 0 || modo == 2)vArticulos.add(espacio[5]);
+		if(modo == 0) vArticulos.add(espacio[6]);
 		vArticulos.add(botonImagen);
 		vArticulos.add(botonAgregar);
 		vArticulos.add(botonCancelar);
@@ -867,13 +880,15 @@ public class VentanaArticulos {
 	}
 	
 	//Constructor
-	VentanaArticulos(){
+	VentanaArticulos(int mode){
 		JFrame ventana= new JFrame("Lista de Artículos");
 		JScrollPane barraDesplazamiento = new JScrollPane(tabla);
-		barraDesplazamiento.setBounds(150,130,500,260); 
 		cuadroImage= new JPanel(new BorderLayout());
 		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		cellSelectionModel.addListSelectionListener(new ListenerTabla());
+		
+		modo= mode;
+		barraDesplazamiento.setBounds(150,130,500,290); 
 
 		//Modificación de los headers de la tabla
 		JTableHeader th = tabla.getTableHeader();

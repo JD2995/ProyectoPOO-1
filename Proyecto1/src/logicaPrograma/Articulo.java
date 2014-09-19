@@ -53,18 +53,6 @@ public abstract class Articulo {
 		this.isPrestado = isPrestado;
 	}
 	
-	public void prestar(){
-		int a= 0;
-	}
-	
-	public void registrar(){
-		int a=0;
-	}
-	
-	public void devolver(){
-		
-	}
-	
 	public abstract boolean Obtener(int num,String name);
 	
 	public abstract void Agregar(String Nombre);

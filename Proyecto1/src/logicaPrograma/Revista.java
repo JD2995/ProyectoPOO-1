@@ -94,7 +94,7 @@ public class Revista extends Articulo{
 		File archivo= new File(nombre);
 		try{
 			FileWriter escribir= new FileWriter(archivo,true);
-			escribir.write(nombre+"_");
+			escribir.write(super.nombre+"_");
 			escribir.write(genero+"_");
 			escribir.write(calificacion+"_");
 			escribir.write(cantidad+"_");

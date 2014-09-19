@@ -7,6 +7,7 @@ package logicaInterfaz;
 public class Proyecto1{	
 	
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		Ventana1 window= new Ventana1("Gestor de préstamos");
 	}
 }

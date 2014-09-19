@@ -1,1 +1,1 @@
-0_9_21_Libro,14_3_-5_Libro,26_6_15_Libro,12_7_20_Libro,
+0_9_21_Libro,14_3_-5_Libro,26_6_15_Libro,12_7_20_Libro,21_0_1_Revista,19_2_13_Revista,6_9_8_Revista,30_6_13_Pelicula,4_5_5_Pelicula,
