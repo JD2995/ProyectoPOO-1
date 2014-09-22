@@ -359,21 +359,60 @@ public class VentanaArticulos {
 				else if(modo == 2) objeto= new Pelicula();
 				
 				palabra= espacio[0].getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 1 no puede estar vació");
+					vArticulos.dispose();
+					return;
+				}
 				objeto.setNombre(palabra);
 				palabra= espacio[1].getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 2 no puede estar vació");
+					vArticulos.dispose();
+					return;
+				}
 				objeto.setGenero(palabra);
 				palabra= espacio[2].getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 3 no puede estar vació");
+					vArticulos.dispose();
+					return;
+				}
 				objeto.setCalificacion(Integer.parseInt(palabra));
 				palabra= espacio[3].getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 4 no puede estar vació");
+					vArticulos.dispose();
+					return;
+				}
 				objeto.setCantidad(Integer.parseInt(palabra));
 				palabra= espacio[4].getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 5 no puede estar vació");
+					vArticulos.dispose();
+					return;
+				}
 				if(modo == 0) ((Libros) objeto).setAutor(palabra);
 				else if(modo == 1) ((Revista) objeto).setEditorial(palabra);
 				else if(modo == 2) ((Pelicula) objeto).setDirector(palabra);
-				if(modo == 0 || modo == 2)palabra= espacio[5].getText();
+				if(modo == 0 || modo == 2){
+					palabra= espacio[5].getText();
+					if(palabra.equals("")==true){
+						mensajeError("Error, no se pueden guardar los cambios","El espacio 6 no puede estar vació");
+						vArticulos.dispose();
+						return;
+					}
+				}
 				if(modo == 0) ((Libros) objeto).setEditorial(palabra);
 				else if(modo == 2) ((Pelicula) objeto).setGenero(palabra);
-				if(modo == 0)palabra= espacio[6].getText();
+				if(modo == 0){
+					palabra= espacio[6].getText();
+					if(palabra.equals("")==true){
+						mensajeError("Error, no se pueden guardar los cambios","El espacio 7 no puede estar vació");
+						vArticulos.dispose();
+						return;
+					}
+				}
 				if(modo == 0) ((Libros) objeto).setEdicion(palabra);
 				//Guardando en el proyecto la imagen de portada conseguida
 				hileraImagen[1]= null;

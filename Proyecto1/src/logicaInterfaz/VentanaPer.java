@@ -207,7 +207,6 @@ public class VentanaPer {
 		rFamiliar= new JRadioButton("Familiar");
 		rFamiliar.setBounds(240, 195, 80, 25);
 		categoria.add(rColega); categoria.add(rEstudiante); categoria.add(rFamiliar);
-		System.out.println(categoria);
 		if (numPer!=-1){int cate = Lista[indLista[numPer]].getCategoria();
 			if (cate==0){rColega.setSelected(true);}
 			else if (cate==1){rEstudiante.setSelected(true);}
@@ -247,14 +246,39 @@ public class VentanaPer {
 				String palabra;
 				
 				palabra= espacio1.getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 1 no puede estar vació");
+					vAgregar.dispose();
+					return;
+				}
 				humano.setNombre(palabra);
 				palabra= espacio2.getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 2 no puede estar vació");
+					vAgregar.dispose();
+					return;
+				}
 				humano.setApellido1(palabra);
 				palabra= espacio3.getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 3 no puede estar vació");
+					vAgregar.dispose();
+					return;
+				}
 				humano.setApellido2(palabra);
 				palabra= espacio4.getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 4 no puede estar vació");
+					vAgregar.dispose();
+					return;
+				}
 				humano.setTelefono(Integer.parseInt(palabra));
 				palabra= espacio5.getText();
+				if(palabra.equals("")==true){
+					mensajeError("Error, no se pueden guardar los cambios","El espacio 5 no puede estar vació");
+					vAgregar.dispose();
+					return;
+				}
 				humano.setCorreo(palabra);
 				humano.setCategoria(0);
 				if (rColega.isSelected()==true){ humano.setCategoria(0);	
@@ -345,10 +369,10 @@ public class VentanaPer {
 	 * Entrada: Ninguna
 	 * Salida: Ninguna
 	 */
-	private void mensajeError(){
+	private void mensajeError(String msg1, String msg2){
 		JFrame vEliminar= new JFrame("Mensaje de Error");
-		JLabel mensaje= new JLabel("Error, la persona no puede ser eliminada");
-		JLabel mensaje1= new JLabel("Posee un artículo prestado");
+		JLabel mensaje= new JLabel(msg1);
+		JLabel mensaje1= new JLabel(msg2);
 		JButton aceptar= new JButton("Aceptar");
 		
 		mensaje.setBounds(30,20,300,25);
@@ -396,7 +420,6 @@ public class VentanaPer {
 		int i=0;
 		int j=0;
 		String hilera= cuadroBusc.getText();
-		//System.out.println(hilera);
 		String palabra= null;
 		cargarNombre();
 		ordenarLista(cantPers);
@@ -409,13 +432,11 @@ public class VentanaPer {
 			if(rNombre.isSelected()==true) palabra= Lista[i].getNombre();
 			else if(rApellido1.isSelected()==true) palabra= Lista[i].getApellido1();
 			else if(rApellido2.isSelected()==true) palabra= Lista[i].getApellido2();
-			//System.out.println(palabra);
 			if(hilera.startsWith(palabra)==true){
 				nombreLista.setValueAt(j, 0, Lista[i].getNombre());
 				nombreLista.setValueAt(j, 1, Lista[i].getApellido1());
 				nombreLista.setValueAt(j, 2, Lista[i].getApellido2());
 				indLista[j]= i;
-				//System.out.println(Lista);
 				j++;
 			}
 			i++;
@@ -463,7 +484,7 @@ public class VentanaPer {
 		botonEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				//Si tiene un articulo prestado
-				if(Lista[indLista[tabla.getSelectedRow()]].isPoseeArticulo()==true) mensajeError(); 
+				if(Lista[indLista[tabla.getSelectedRow()]].isPoseeArticulo()==true) mensajeError("Error, la persona no puede ser eliminada","Posee un articulo prestado"); 
 				else ventanaEliminar(tabla.getSelectedRow());
 			}
 		});
