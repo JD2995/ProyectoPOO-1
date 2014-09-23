@@ -28,6 +28,12 @@ public class Ventana1{
 		ventanaAbierta= false;
 	}
 	
+	private void consTop(){
+		@SuppressWarnings("unused")
+		VentanaTop ventana2= new VentanaTop();
+		ventanaAbierta= false;
+	}
+	
 	public Ventana1(String title){
 		JFrame ventana= new JFrame(title);
 		JLabel label1= new JLabel("Tipo de Articulo:");
@@ -75,6 +81,15 @@ public class Ventana1{
 		Bprestamos.setIcon(ImagePrest);
 		Btop.setBounds(20,256,500,50);
 		Btop.setIcon(ImageTop);
+		Btop.setMnemonic(KeyEvent.VK_I);
+		Btop.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(ventanaAbierta==false){
+					ventanaAbierta= true;
+					consTop();
+				}
+			}
+		});
 		Brango.setBounds(20,308,500,50);
 		Bprestamos.setMnemonic(KeyEvent.VK_I);
 		Bprestamos.addActionListener(new ActionListener(){

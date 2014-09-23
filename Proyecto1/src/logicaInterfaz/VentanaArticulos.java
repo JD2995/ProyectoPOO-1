@@ -429,7 +429,7 @@ public class VentanaArticulos {
 					ordenarLista(cantArtic);
 					
 					if(numArtic==-1) hileraImagen[1]=espacio[0].getText()+segundos;
-					TO= Paths.get(hileraImagen[1]);
+					TO= Paths.get("covers",hileraImagen[1]);
 					CopyOption [] options= new CopyOption[]{
 						StandardCopyOption.REPLACE_EXISTING,
 						StandardCopyOption.COPY_ATTRIBUTES
@@ -900,7 +900,7 @@ public class VentanaArticulos {
 					hilera= Lista[indLista[filaSelect[i]]].getNImagen();
 					try{
 						iconImagen= null;
-						if(hilera!= null) iconImagen= new ImageIcon(hilera);
+						if(hilera!= null) iconImagen= new ImageIcon("covers/"+hilera);
 						else iconImagen= new ImageIcon("noImage.png");
 						img= iconImagen.getImage();
 						newimg= img.getScaledInstance(90, 135, Image.SCALE_DEFAULT);
