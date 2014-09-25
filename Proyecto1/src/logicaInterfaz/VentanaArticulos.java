@@ -245,7 +245,7 @@ public class VentanaArticulos {
 		});
 	}
 	
-	private void ventanaArticulos(int numArtic){
+	class VentanaAgregar implements ActionListener{
 		JLabel label1,label2,label3,label4,label5,label6,label7,label8;
 		JLabel lImagen;
 		JTextField espacio[]= new JTextField[7];
@@ -253,102 +253,15 @@ public class VentanaArticulos {
 		ImageIcon iconImagen= null;
 		JPanel cuadroImage= new JPanel(new BorderLayout());
 		String hileraImagen[]= new String[2];
+		int numArtic;
 		
-		//Colocación del nombre de la ventana
-		if(modo == 0 && numArtic == -1) vArticulos= new JFrame("Agregar Libro");
-		else if(modo == 0 && numArtic != -1) vArticulos= new JFrame("Editar Libro");
-		else if(modo == 1 && numArtic == -1) vArticulos= new JFrame("Agregar Revista");
-		else if(modo == 1 && numArtic != -1) vArticulos= new JFrame("Editar Revista");
-		else if(modo == 2 && numArtic == -1) vArticulos= new JFrame("Agregar Película");
-		else if(modo == 2 && numArtic != -1) vArticulos= new JFrame("Editar Revista");
-		
-		//Colocación de los labels
-		label1= new JLabel("Nombre:");
-		label1.setBounds(110,10,100,30);
-		label1.setHorizontalAlignment(JLabel.RIGHT);
-		label2= new JLabel("Género:");
-		label2.setBounds(110,45,100,30);
-		label2.setHorizontalAlignment(JLabel.RIGHT);
-		label3= new JLabel("Calificación:");
-		label3.setBounds(110,80,100,30);
-		label3.setHorizontalAlignment(JLabel.RIGHT);
-		label4= new JLabel("Cantidad:");
-		label4.setBounds(110,115,100,30);
-		label4.setHorizontalAlignment(JLabel.RIGHT);
-		label5= new JLabel("nImagen:");
-		label5.setBounds(110,150,100,30);
-		label5.setHorizontalAlignment(JLabel.RIGHT);
-		label6= null;
-		if(modo == 0) label6= new JLabel("Autor:");
-		else if(modo == 1) label6= new JLabel("Editorial:");
-		else if(modo == 2) label6= new JLabel("Director:");
-		label6.setBounds(110,185,100,30);
-		label6.setHorizontalAlignment(JLabel.RIGHT);
-		label7= new JLabel();
-		if(modo == 0) label7= new JLabel("Editorial:");
-		else if(modo == 2) label7= new JLabel("Género:");
-		label7.setBounds(110,220,100,30);
-		label7.setHorizontalAlignment(JLabel.RIGHT);
-		label8= new JLabel();
-		if(modo == 0) label8= new JLabel("Edición: ");
-		label8.setBounds(110,255,100,30);
-		label8.setHorizontalAlignment(JLabel.RIGHT);
-		
-		//Colocación de los cuadros de entrada
-		espacio[0]= new JTextField();
-		if(numArtic!= -1) espacio[0].setText(Lista[indLista[numArtic]].getNombre()); 
-		espacio[0].setBounds(220,13,200,20);
-		soloLetras(espacio[0]);
-		espacio[1]= new JTextField();
-		if(numArtic!= -1) espacio[1].setText(Lista[indLista[numArtic]].getGenero());
-		espacio[1].setBounds(220,48,200,20);
-		soloLetras(espacio[1]);
-		espacio[2]= new JTextField();
-		if(numArtic!= -1) espacio[2].setText(Integer.toString(Lista[indLista[numArtic]].getCalificacion()));
-		espacio[2].setBounds(220,83,200,20);
-		soloNumeros(espacio[2]);
-		espacio[3]= new JTextField();
-		if(numArtic!= -1) espacio[3].setText(Integer.toString(Lista[indLista[numArtic]].getCantidad()));
-		espacio[3].setBounds(220,118,200,20);
-		soloNumeros(espacio[3]);
-		espacio[4]= new JTextField(); 
-		if(numArtic!= -1 && modo == 0) espacio[4].setText(((Libros) Lista[indLista[numArtic]]).getAutor()); 
-		if(numArtic!= -1 && modo == 1) espacio[4].setText(((Revista) Lista[indLista[numArtic]]).getEditorial());
-		if(numArtic!= -1 && modo == 2) espacio[4].setText(((Pelicula) Lista[indLista[numArtic]]).getDirector()); 
-		espacio[4].setBounds(220,188,200,20);
-		soloLetras(espacio[4]);
-		espacio[5]= null;
-		if(modo == 0 || modo == 2){
-			espacio[5]= new JTextField();
-			if(numArtic!= -1 && modo == 0) espacio[5].setText(((Libros) Lista[indLista[numArtic]]).getEditorial());
-			if(numArtic!= -1 && modo == 2) espacio[5].setText(((Pelicula) Lista[indLista[numArtic]]).getGenero());
-			espacio[5].setBounds(220, 223, 200, 20);
-			soloLetras(espacio[5]);
-		}		
-		espacio[6]= null;
-		if(modo == 0) {
-			espacio[6]= new JTextField();
-			if(numArtic!= -1) espacio[6].setText(((Libros) Lista[indLista[numArtic]]).getEdicion());
-			espacio[6].setBounds(220,258,200,20);
-			soloLetras(espacio[6]);
-		}
-		
-		//Colocación de botones
-		hileraImagen[0]= null;
-		botonImagen= new JButton("Explorar");
-		botonImagen.setBounds(220,153,100,20);
-		botonImagen.setMnemonic(KeyEvent.VK_1);
-		botonImagen.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+		//Acciones a ejecutar
+		public void actionPerformed(ActionEvent e){
+			if("Imagen".equals(e.getActionCommand())){
 				hileraImagen[0]= ventanaImagen();
 				return;
 			}
-		});
-		if(numArtic == -1) botonAgregar= new JButton("Agregar");
-		else botonAgregar= new JButton("Editar");
-		botonAgregar.setMnemonic(KeyEvent.VK_I);
-		botonAgregar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
+			else if("Agregar".equals(e.getActionCommand())){
 				Articulo objeto= null;
 				String palabra;
 				Path FROM= null;
@@ -360,35 +273,35 @@ public class VentanaArticulos {
 				
 				palabra= espacio[0].getText();
 				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 1 no puede estar vació");
+					new MensajeError("Error, no se pueden guardar los cambios","El espacio 1 no puede estar vació");
 					vArticulos.dispose();
 					return;
 				}
 				objeto.setNombre(palabra);
 				palabra= espacio[1].getText();
 				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 2 no puede estar vació");
+					new MensajeError("Error, no se pueden guardar los cambios","El espacio 2 no puede estar vació");
 					vArticulos.dispose();
 					return;
 				}
 				objeto.setGenero(palabra);
 				palabra= espacio[2].getText();
 				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 3 no puede estar vació");
+					new MensajeError("Error, no se pueden guardar los cambios","El espacio 3 no puede estar vació");
 					vArticulos.dispose();
 					return;
 				}
 				objeto.setCalificacion(Integer.parseInt(palabra));
 				palabra= espacio[3].getText();
 				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 4 no puede estar vació");
+					new MensajeError("Error, no se pueden guardar los cambios","El espacio 4 no puede estar vació");
 					vArticulos.dispose();
 					return;
 				}
 				objeto.setCantidad(Integer.parseInt(palabra));
 				palabra= espacio[4].getText();
 				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 5 no puede estar vació");
+					new MensajeError("Error, no se pueden guardar los cambios","El espacio 5 no puede estar vació");
 					vArticulos.dispose();
 					return;
 				}
@@ -398,7 +311,7 @@ public class VentanaArticulos {
 				if(modo == 0 || modo == 2){
 					palabra= espacio[5].getText();
 					if(palabra.equals("")==true){
-						mensajeError("Error, no se pueden guardar los cambios","El espacio 6 no puede estar vació");
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 6 no puede estar vació");
 						vArticulos.dispose();
 						return;
 					}
@@ -408,7 +321,7 @@ public class VentanaArticulos {
 				if(modo == 0){
 					palabra= espacio[6].getText();
 					if(palabra.equals("")==true){
-						mensajeError("Error, no se pueden guardar los cambios","El espacio 7 no puede estar vació");
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 7 no puede estar vació");
 						vArticulos.dispose();
 						return;
 					}
@@ -456,52 +369,147 @@ public class VentanaArticulos {
 				ordenarLista(cantArtic);
 				return;
 			}
-		});
-		botonCancelar= new JButton("Cancelar");
-		botonAgregar.setBounds(200,295,100,25);
-		botonCancelar.setBounds(320, 295, 100, 25);
-		botonCancelar.setMnemonic(KeyEvent.VK_I);
-		botonCancelar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vArticulos.dispose();
-				return;
+		}
+		
+		VentanaAgregar(int pnumArtic){
+			numArtic= pnumArtic;
+			
+			//Colocación del nombre de la ventana
+			if(modo == 0 && numArtic == -1) vArticulos= new JFrame("Agregar Libro");
+			else if(modo == 0 && numArtic != -1) vArticulos= new JFrame("Editar Libro");
+			else if(modo == 1 && numArtic == -1) vArticulos= new JFrame("Agregar Revista");
+			else if(modo == 1 && numArtic != -1) vArticulos= new JFrame("Editar Revista");
+			else if(modo == 2 && numArtic == -1) vArticulos= new JFrame("Agregar Película");
+			else if(modo == 2 && numArtic != -1) vArticulos= new JFrame("Editar Revista");
+			
+			//Colocación de los labels
+			label1= new JLabel("Nombre:");
+			label1.setBounds(110,10,100,30);
+			label1.setHorizontalAlignment(JLabel.RIGHT);
+			label2= new JLabel("Género:");
+			label2.setBounds(110,45,100,30);
+			label2.setHorizontalAlignment(JLabel.RIGHT);
+			label3= new JLabel("Calificación:");
+			label3.setBounds(110,80,100,30);
+			label3.setHorizontalAlignment(JLabel.RIGHT);
+			label4= new JLabel("Cantidad:");
+			label4.setBounds(110,115,100,30);
+			label4.setHorizontalAlignment(JLabel.RIGHT);
+			label5= new JLabel("nImagen:");
+			label5.setBounds(110,150,100,30);
+			label5.setHorizontalAlignment(JLabel.RIGHT);
+			label6= null;
+			if(modo == 0) label6= new JLabel("Autor:");
+			else if(modo == 1) label6= new JLabel("Editorial:");
+			else if(modo == 2) label6= new JLabel("Director:");
+			label6.setBounds(110,185,100,30);
+			label6.setHorizontalAlignment(JLabel.RIGHT);
+			label7= new JLabel();
+			if(modo == 0) label7= new JLabel("Editorial:");
+			else if(modo == 2) label7= new JLabel("Género:");
+			label7.setBounds(110,220,100,30);
+			label7.setHorizontalAlignment(JLabel.RIGHT);
+			label8= new JLabel();
+			if(modo == 0) label8= new JLabel("Edición: ");
+			label8.setBounds(110,255,100,30);
+			label8.setHorizontalAlignment(JLabel.RIGHT);
+			
+			//Colocación de los cuadros de entrada
+			espacio[0]= new JTextField();
+			if(numArtic!= -1) espacio[0].setText(Lista[indLista[numArtic]].getNombre()); 
+			espacio[0].setBounds(220,13,200,20);
+			soloLetras(espacio[0]);
+			espacio[1]= new JTextField();
+			if(numArtic!= -1) espacio[1].setText(Lista[indLista[numArtic]].getGenero());
+			espacio[1].setBounds(220,48,200,20);
+			soloLetras(espacio[1]);
+			espacio[2]= new JTextField();
+			if(numArtic!= -1) espacio[2].setText(Integer.toString(Lista[indLista[numArtic]].getCalificacion()));
+			espacio[2].setBounds(220,83,200,20);
+			soloNumeros(espacio[2]);
+			espacio[3]= new JTextField();
+			if(numArtic!= -1) espacio[3].setText(Integer.toString(Lista[indLista[numArtic]].getCantidad()));
+			espacio[3].setBounds(220,118,200,20);
+			soloNumeros(espacio[3]);
+			espacio[4]= new JTextField(); 
+			if(numArtic!= -1 && modo == 0) espacio[4].setText(((Libros) Lista[indLista[numArtic]]).getAutor()); 
+			if(numArtic!= -1 && modo == 1) espacio[4].setText(((Revista) Lista[indLista[numArtic]]).getEditorial());
+			if(numArtic!= -1 && modo == 2) espacio[4].setText(((Pelicula) Lista[indLista[numArtic]]).getDirector()); 
+			espacio[4].setBounds(220,188,200,20);
+			soloLetras(espacio[4]);
+			espacio[5]= null;
+			if(modo == 0 || modo == 2){
+				espacio[5]= new JTextField();
+				if(numArtic!= -1 && modo == 0) espacio[5].setText(((Libros) Lista[indLista[numArtic]]).getEditorial());
+				if(numArtic!= -1 && modo == 2) espacio[5].setText(((Pelicula) Lista[indLista[numArtic]]).getGenero());
+				espacio[5].setBounds(220, 223, 200, 20);
+				soloLetras(espacio[5]);
+			}		
+			espacio[6]= null;
+			if(modo == 0) {
+				espacio[6]= new JTextField();
+				if(numArtic!= -1) espacio[6].setText(((Libros) Lista[indLista[numArtic]]).getEdicion());
+				espacio[6].setBounds(220,258,200,20);
+				soloLetras(espacio[6]);
 			}
-		});
-		
-		iconImagen= new ImageIcon();
-		lImagen= new JLabel(iconImagen);
-		cuadroImage.add(lImagen);
-		cuadroImage.setBorder(BorderFactory.createLineBorder(Color.black));
-		cuadroImage.setBounds(15, 15, 100, 150);
-		//Inserción de los componentes al frame
-		vArticulos.setLayout(null);
-		vArticulos.add(cuadroImage);
-		vArticulos.add(label1);
-		vArticulos.add(label2);
-		vArticulos.add(label3);
-		vArticulos.add(label4);
-		vArticulos.add(label5);
-		vArticulos.add(label6);
-		vArticulos.add(label7);
-		vArticulos.add(label8);
-		vArticulos.add(espacio[0]);
-		vArticulos.add(espacio[1]);
-		vArticulos.add(espacio[2]);
-		vArticulos.add(espacio[3]);
-		vArticulos.add(espacio[4]);
-		if(modo == 0 || modo == 2)vArticulos.add(espacio[5]);
-		if(modo == 0) vArticulos.add(espacio[6]);
-		vArticulos.add(botonImagen);
-		vArticulos.add(botonAgregar);
-		vArticulos.add(botonCancelar);
-		
-		vArticulos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
-		vArticulos.setSize(465,370);	//Tamaño de la ventana
-		vArticulos.setVisible(true);
-		vArticulos.setResizable(false);
+			
+			//Colocación de botones
+			hileraImagen[0]= null;
+			botonImagen= new JButton("Explorar");
+			botonImagen.setBounds(220,153,100,20);
+			botonImagen.setActionCommand("Imagen");
+			botonImagen.setMnemonic(KeyEvent.VK_1);
+			botonImagen.addActionListener(this);
+			if(numArtic == -1) botonAgregar= new JButton("Agregar");
+			else botonAgregar= new JButton("Editar");
+			botonAgregar.setMnemonic(KeyEvent.VK_I);
+			botonAgregar.setActionCommand("Agregar");
+			botonAgregar.addActionListener(this);
+			botonCancelar= new JButton("Cancelar");
+			botonAgregar.setBounds(200,295,100,25);
+			botonCancelar.setBounds(320, 295, 100, 25);
+			botonCancelar.setMnemonic(KeyEvent.VK_I);
+			botonCancelar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vArticulos.dispose();
+					return;
+				}
+			});
+			
+			iconImagen= new ImageIcon();
+			lImagen= new JLabel(iconImagen);
+			cuadroImage.add(lImagen);
+			cuadroImage.setBorder(BorderFactory.createLineBorder(Color.black));
+			cuadroImage.setBounds(15, 15, 100, 150);
+			//Inserción de los componentes al frame
+			vArticulos.setLayout(null);
+			vArticulos.add(cuadroImage);
+			vArticulos.add(label1);
+			vArticulos.add(label2);
+			vArticulos.add(label3);
+			vArticulos.add(label4);
+			vArticulos.add(label5);
+			vArticulos.add(label6);
+			vArticulos.add(label7);
+			vArticulos.add(label8);
+			vArticulos.add(espacio[0]);
+			vArticulos.add(espacio[1]);
+			vArticulos.add(espacio[2]);
+			vArticulos.add(espacio[3]);
+			vArticulos.add(espacio[4]);
+			if(modo == 0 || modo == 2)vArticulos.add(espacio[5]);
+			if(modo == 0) vArticulos.add(espacio[6]);
+			vArticulos.add(botonImagen);
+			vArticulos.add(botonAgregar);
+			vArticulos.add(botonCancelar);
+			
+			vArticulos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
+			vArticulos.setSize(465,370);	//Tamaño de la ventana
+			vArticulos.setVisible(true);
+			vArticulos.setResizable(false);
+		}
 	}
-	
-	
+		
 	private void buscarLista(){
 		int i=0;
 		int j=0;
@@ -519,14 +527,13 @@ public class VentanaArticulos {
 			if(rNomLibro.isSelected()==true) palabra= Lista[i].getNombre();
 			else if(rGenLibro.isSelected()==true) palabra= Lista[i].getGenero();
 			else if(rCalLibro.isSelected()==true) palabra=Integer.toString(Lista[i].getCalificacion());
-			//System.out.println(palabra);
+			
 			if(hilera.startsWith(palabra)==true){
 				nombreLista.setValueAt(j, 0, Lista[i].getNombre());
 				nombreLista.setValueAt(j, 1, Lista[i].getGenero());
-				nombreLista.setValueAt(j, 2, Lista[i].getCalificacion());
-				nombreLista.setValueAt(j, 3, Lista[i].getCantidad());
+				nombreLista.setValueAt(j, 2, Integer.toString(Lista[i].getCalificacion()));
+				nombreLista.setValueAt(j, 3, Integer.toString(Lista[i].getCantidad()));
 				indLista[j]= i;
-				//System.out.println(Lista);
 				j++;
 			}
 			i++;
@@ -542,88 +549,93 @@ public class VentanaArticulos {
 		}
 	}
 	
-	/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
-	 * debido a que tiene un articulo prestado
-	 * Entrada: Ninguna
-	 * Salida: Ninguna
-	 */
-	private void mensajeError(String msg1, String msg2){
+	class MensajeError{
+		/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
+		 * debido a que tiene un articulo prestado
+		 * Entrada: Ninguna
+		 * Salida: Ninguna
+		 */
 		JFrame vEliminar= new JFrame("Mensaje de Error");
-		JLabel mensaje= new JLabel(msg1);
-		JLabel mensaje1= new JLabel(msg2);
+		JLabel mensaje;
+		JLabel mensaje1;
 		JButton aceptar= new JButton("Aceptar");
 		
-		mensaje.setBounds(30,20,300,25);
-		mensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		mensaje1.setBounds(30, 45, 300, 25);
-		mensaje1.setHorizontalAlignment(SwingConstants.CENTER);
-		aceptar.setBounds(135,80,90,25);
-		aceptar.setMnemonic(KeyEvent.VK_I);
-		aceptar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vEliminar.dispose();
-				return;
-			}
-		});
-		
-		vEliminar.setLayout(null);
-		vEliminar.add(mensaje);
-		vEliminar.add(mensaje1);
-		vEliminar.add(aceptar);
-		
-		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
-		vEliminar.setSize(360,150);
-		vEliminar.setVisible(true);
-		vEliminar.setResizable(false);
+		MensajeError(String msg1, String msg2){
+			mensaje= new JLabel(msg1);
+			mensaje1= new JLabel(msg2);
+			mensaje.setBounds(30,20,300,25);
+			mensaje.setHorizontalAlignment(SwingConstants.CENTER);
+			mensaje1.setBounds(30, 45, 300, 25);
+			mensaje1.setHorizontalAlignment(SwingConstants.CENTER);
+			aceptar.setBounds(135,80,90,25);
+			aceptar.setMnemonic(KeyEvent.VK_I);
+			aceptar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vEliminar.dispose();
+					return;
+				}
+			});
+			
+			vEliminar.setLayout(null);
+			vEliminar.add(mensaje);
+			vEliminar.add(mensaje1);
+			vEliminar.add(aceptar);
+			
+			vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+			vEliminar.setSize(360,150);
+			vEliminar.setVisible(true);
+			vEliminar.setResizable(false);
+		}
 	}
 	
-	
-	
-	
-	/*Descripción: Función que crea la ventana de eliminación de una persona
-	 * Entrada: Int número de persona a eliminar
-	 * Salida: Ninguna
-	 */
-	private void ventanaEliminar(int numArtic){
+	class VentanaEliminar{
 		JFrame vEliminar= new JFrame("Eliminar Articulo");
 		JLabel mensaje= new JLabel("¿Esta seguro de eliminar al articulo del registro?");
 		JButton aceptar= new JButton("Aceptar");
 		JButton cancelar= new JButton("Cancelar");
 		Articulo articulo= new Libros();
+		int numArtic;
 		
-		mensaje.setBounds(30,20,300,25);
-		aceptar.setBounds(85,50,90,25);
-		aceptar.setMnemonic(KeyEvent.VK_I);
-		aceptar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if(modo == 0) articulo.eliminar(indLista[numArtic],"Libros.txt");
-				else if(modo == 1) articulo.eliminar(indLista[numArtic],"Revistas.txt");
-				else if(modo == 2) articulo.eliminar(indLista[numArtic],"Peliculas.txt");
-				vEliminar.dispose();
-				cantArtic--;
-				cargarNombre();
-				ordenarLista(cantArtic);
-				return;
-			}
-		});
-		cancelar.setBounds(195,50,90,25);
-		cancelar.setMnemonic(KeyEvent.VK_I);
-		cancelar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vEliminar.dispose();
-				return;
-			}
-		});
-		
-		vEliminar.setLayout(null);
-		vEliminar.add(mensaje);
-		vEliminar.add(aceptar);
-		vEliminar.add(cancelar);
-		
-		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
-		vEliminar.setSize(360,120);
-		vEliminar.setVisible(true);
-		vEliminar.setResizable(false);
+		/*Descripción: Función que crea la ventana de eliminación de una persona
+		 * Entrada: Int número de persona a eliminar
+		 * Salida: Ninguna
+		 */
+		VentanaEliminar(int pnumArtic){
+			numArtic= pnumArtic;
+			mensaje.setBounds(30,20,300,25);
+			aceptar.setBounds(85,50,90,25);
+			aceptar.setMnemonic(KeyEvent.VK_I);
+			aceptar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					if(modo == 0) articulo.eliminar(indLista[numArtic],"Libros.txt");
+					else if(modo == 1) articulo.eliminar(indLista[numArtic],"Revistas.txt");
+					else if(modo == 2) articulo.eliminar(indLista[numArtic],"Peliculas.txt");
+					vEliminar.dispose();
+					cantArtic--;
+					cargarNombre();
+					ordenarLista(cantArtic);
+					return;
+				}
+			});
+			cancelar.setBounds(195,50,90,25);
+			cancelar.setMnemonic(KeyEvent.VK_I);
+			cancelar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vEliminar.dispose();
+					return;
+				}
+			});
+			
+			vEliminar.setLayout(null);
+			vEliminar.add(mensaje);
+			vEliminar.add(aceptar);
+			vEliminar.add(cancelar);
+			
+			vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+			vEliminar.setSize(360,120);
+			vEliminar.setVisible(true);
+			vEliminar.setResizable(false);
+		}
 	}
 	
 	private String ventanaImagen(){
@@ -713,74 +725,82 @@ public class VentanaArticulos {
 		}
 	}
 	
-	public void prestar(int numArtic){
+	//Clase con la ventana de Prestar un artículo
+	class Prestar implements ActionListener{
 		JFrame vPrestar = new JFrame("Prestar Articulo");
 		JButton prestar= new JButton("Prestar");
 		JLabel label= new JLabel("Cantidad disponible:");
 		JLabel  cantidad= new JLabel();
 		JLabel label2= new JLabel("Días del prestamo:");
 		JTextField inputDias= new JTextField();
-		int cantDisponible= Lista[indLista[numArtic]].getCantidad()-cantPrestado(indLista[numArtic]);
+		int cantDisponible;
+		int numArtic;
 		
-		//Modificación de los headers de la tabla
-		JTableHeader tableh = tablePrestar.getTableHeader();
-		TableColumnModel tablecm = tableh.getColumnModel();
-		TableColumn tablec = tablecm.getColumn(0);
-		tablec.setHeaderValue("Nombre");
-		tablec = tablecm.getColumn(1);
-		tablec.setHeaderValue("Apellido 1");
-		tablec = tablecm.getColumn(2);
-		tablec.setHeaderValue("Apellido 2");
-		tableh.repaint();
+		/*Descripción: Constructor de la ventana de prestar
+		 * Entrada: Integer con el número de ventana a prestar
+		 * Salida: Ninguna
+		 */
+		Prestar(int pnumArtic){
+			this.numArtic= pnumArtic;
+			cantDisponible= Lista[indLista[numArtic]].getCantidad()-cantPrestado(indLista[numArtic]);
+			//Modificación de los headers de la tabla
+			JTableHeader tableh = tablePrestar.getTableHeader();
+			TableColumnModel tablecm = tableh.getColumnModel();
+			TableColumn tablec = tablecm.getColumn(0);
+			tablec.setHeaderValue("Nombre");
+			tablec = tablecm.getColumn(1);
+			tablec.setHeaderValue("Apellido 1");
+			tablec = tablecm.getColumn(2);
+			tablec.setHeaderValue("Apellido 2");
+			tableh.repaint();
+			
+			CargarPersonas();
+			ordenarPers(cantPers);
+			
+			label.setBounds(10,130,125,25);
+			cantidad.setText(Integer.toString(cantDisponible));
+			cantidad.setBounds(10, 150, 125, 25);
+			cantidad.setForeground(Color.BLUE);
+			cantidad.setHorizontalAlignment(SwingConstants.CENTER);
+			JScrollPane barraDesplazamiento1 = new JScrollPane(tablePrestar);
+			barraDesplazamiento1.setBounds(150,130,475,260);
+			prestar.setBounds(10, 231, 125, 25);
+			prestar.setMnemonic(KeyEvent.VK_I);
+			prestar.addActionListener(this);
+			label2.setBounds(10,175,125,25);
+			inputDias.setBounds(10, 200, 125, 25);
+			inputDias.setText("1");
+			soloNumeros(inputDias);
+			
+			vPrestar.setLayout(null);
+			vPrestar.add(barraDesplazamiento1);
+			vPrestar.add(label);
+			vPrestar.add(label2);
+			vPrestar.add(prestar);
+			vPrestar.add(cantidad);
+			vPrestar.add(inputDias);
+			
+			
+			vPrestar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+			vPrestar.setSize(650,450);
+			vPrestar.setVisible(true);
+			vPrestar.setResizable(false);
+		}
 		
-		CargarPersonas();
-		ordenarPers(cantPers);
-		
-		label.setBounds(10,130,125,25);
-		cantidad.setText(Integer.toString(cantDisponible));
-		cantidad.setBounds(10, 150, 125, 25);
-		cantidad.setForeground(Color.BLUE);
-		cantidad.setHorizontalAlignment(SwingConstants.CENTER);
-		JScrollPane barraDesplazamiento1 = new JScrollPane(tablePrestar);
-		barraDesplazamiento1.setBounds(150,130,475,260);
-		prestar.setBounds(10, 231, 125, 25);
-		prestar.setMnemonic(KeyEvent.VK_I);
-		prestar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				Prestamo temp= new Prestamo();
-				if(cantDisponible == 0) mensajeError("Error, el artículo no puede ser prestado","No hay suficiente cantidad");
-				else{
-					temp.setNumeroArticulo(indLista[numArtic]);
-					temp.setNumeroPersona(indListaPers[tablePrestar.getSelectedRow()]);
-					if(modo == 0) temp.setTipoArticulo("Libro");
-					else if(modo == 1) temp.setTipoArticulo("Revista");
-					else if(modo == 2) temp.setTipoArticulo("Pelicula");
-					temp.setCantDias(Integer.parseInt(inputDias.getText()));
-					temp.Agregar("Prestamos.txt");
-				}
-				vPrestar.dispose();
+		public void actionPerformed(ActionEvent e){
+			Prestamo temp= new Prestamo();
+			if(cantDisponible == 0) new MensajeError("Error, el artículo no puede ser prestado","No hay suficiente cantidad");
+			else{
+				temp.setNumeroArticulo(indLista[numArtic]);
+				temp.setNumeroPersona(indListaPers[tablePrestar.getSelectedRow()]);
+				if(modo == 0) temp.setTipoArticulo("Libro");
+				else if(modo == 1) temp.setTipoArticulo("Revista");
+				else if(modo == 2) temp.setTipoArticulo("Pelicula");
+				temp.setCantDias(Integer.parseInt(inputDias.getText()));
+				temp.Agregar("Prestamos.txt");
 			}
-		});
-		label2.setBounds(10,175,125,25);
-		inputDias.setBounds(10, 200, 125, 25);
-		inputDias.setText("1");
-		soloNumeros(inputDias);
-		
-		vPrestar.setLayout(null);
-		vPrestar.add(barraDesplazamiento1);
-		vPrestar.add(label);
-		vPrestar.add(label2);
-		vPrestar.add(prestar);
-		vPrestar.add(cantidad);
-		vPrestar.add(inputDias);
-		
-		
-		vPrestar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
-		vPrestar.setSize(650,450);
-		vPrestar.setVisible(true);
-		vPrestar.setResizable(false);
-		
-		
+			vPrestar.dispose();
+		}
 	}
 	
 	
@@ -797,7 +817,7 @@ public class VentanaArticulos {
 		botonAgregar.setMnemonic(KeyEvent.VK_I);
 		botonAgregar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				ventanaArticulos(-1);
+				new VentanaAgregar(-1);
 			}
 		});
 		botonEditar= new JButton("Editar");
@@ -807,7 +827,7 @@ public class VentanaArticulos {
 		botonEditar.setMnemonic(KeyEvent.VK_I);
 		botonEditar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				ventanaArticulos(tabla.getSelectedRow());
+				new VentanaAgregar(tabla.getSelectedRow());
 			}
 		});
 
@@ -819,9 +839,9 @@ public class VentanaArticulos {
 		botonEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(Lista[indLista[tabla.getSelectedRow()]].getIsPrestado() == true){
-					mensajeError("Error, el artículo no puede ser eliminado","El artículo se encuentra prestado");
+					new MensajeError("Error, el artículo no puede ser eliminado","El artículo se encuentra prestado");
 				}
-				else ventanaEliminar(tabla.getSelectedRow());
+				else new VentanaEliminar(tabla.getSelectedRow());
 			}
 		});
 		botonImportar= new JButton("Importar");
@@ -850,7 +870,7 @@ public class VentanaArticulos {
 		botonPrestar.setMnemonic(KeyEvent.VK_I);
 		botonPrestar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				prestar(tabla.getSelectedRow());
+				new Prestar(tabla.getSelectedRow());
 			}
 		});
 		

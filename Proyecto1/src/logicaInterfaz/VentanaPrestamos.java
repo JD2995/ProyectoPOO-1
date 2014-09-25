@@ -67,7 +67,6 @@ public class VentanaPrestamos {
 		}
 	}
 	
-	//No implementado aun
 	private void filtrarLista(){
 		int i=0;
 		int j=0;
@@ -88,40 +87,42 @@ public class VentanaPrestamos {
 			//Si la búsqueda es de nombre de la persona
 			if(rNombre.isSelected()==true){
 				tempPer= new Personas();
-				tempPer.Obtener(Lista[i].getNumeroPersona(), "Reg_Pers.txt");
+				tempPer.Obtener(Lista[i].getNumeroPersona()+1, "Reg_Pers.txt");
 				palabra= tempPer.getNombre()+" "+tempPer.getApellido1();
 			}
 			//Si la búsqueda es de nombre del artículo
 			else if(rArticulo.isSelected()==true){
 				if(Lista[i].getTipoArticulo().equals("Libro")) {
 					tempArtic= new Libros();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Libros.txt");
+					tempArtic.Obtener(Lista[i].getNumeroArticulo()+1, "Libros.txt");
 				}
 				else if(Lista[i].getTipoArticulo().equals("Revista")) {
 					tempArtic= new Revista();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Revistas.txt");
+					tempArtic.Obtener(Lista[i].getNumeroArticulo()+1, "Revistas.txt");
 				}
 				else if(Lista[i].getTipoArticulo().equals("Pelicula")){
 					tempArtic= new Pelicula();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Peliculas.txt");
+					tempArtic.Obtener(Lista[i].getNumeroArticulo()+1, "Peliculas.txt");
 				}
 				palabra= tempArtic.getNombre();
 			}
 			//Si la búsqueda es de tipo del artículo
-			else if(rTipo.isSelected()==true) palabra= Lista[i].getTipoArticulo();
+			else if(rTipo.isSelected()==true){
+				palabra= Lista[i].getTipoArticulo();
+			}
 			if(hilera.startsWith(palabra)==true){
 				//Obtención y carga del nombre del artículo
 				if(Lista[i].getTipoArticulo().equals("Libro")) {
 					tempArtic= new Libros();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Libros.txt");
+					tempArtic.Obtener(Lista[i].getNumeroArticulo()+1, "Libros.txt");
 				}
 				else if(Lista[i].getTipoArticulo().equals("Revista")) {
 					tempArtic= new Revista();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Revistas.txt");
+					tempArtic.Obtener(Lista[i].getNumeroArticulo()+1, "Revistas.txt");
 				}
 				else if(Lista[i].getTipoArticulo().equals("Pelicula")){
 					tempArtic= new Pelicula();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Peliculas.txt");
+					tempArtic.Obtener(Lista[i].getNumeroArticulo()+1, "Peliculas.txt");
 				}
 				aux= tempArtic.getNombre();
 				nombreLista.setValueAt(j, 0, aux);
@@ -129,13 +130,12 @@ public class VentanaPrestamos {
 				nombreLista.setValueAt(j, 1, Lista[i].getTipoArticulo());
 				//Obtención y carga del nombre de Persona
 				tempPer= new Personas();
-				tempPer.Obtener(Lista[i].getNumeroPersona(), "Reg_Pers.txt");
+				tempPer.Obtener(Lista[i].getNumeroPersona()+1, "Reg_Pers.txt");
 				aux= tempPer.getNombre()+" "+tempPer.getApellido1();
 				nombreLista.setValueAt(j, 2, aux);
 				//Obtención y carga de la cantidad de días del préstamo
 				nombreLista.setValueAt(j, 3, Integer.toString(Lista[i].getCantDias()));
 				indLista[j]= i;
-				//System.out.println(Lista);
 				j++;
 			}
 			i++;

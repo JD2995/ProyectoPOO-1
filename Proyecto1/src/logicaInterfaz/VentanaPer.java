@@ -169,235 +169,245 @@ public class VentanaPer {
 		});
 	}
 	
-	
-	
-	/*Descripción: Función que maneja la ventana para agregar una persona
-	 * Entrada: Un int, si es 0 significa que va a agregar una nueva personas, sino es el número de persona a editar
-	 * Salida: Ninguna
-	 */
-	private void ventanaPersona(int numPer){
+	class VentanaAgregar{
 		JFrame vAgregar;		//Creación de la ventana
 		JTextField espacio1,espacio2,espacio3,espacio4,espacio5;	//Inicialización de los cuadros de entrada de texto
 		JLabel label1,label2,label3,label4,label5,label6;
 		JButton boton;
+		int numPer;
 		
-		if(numPer==-1) vAgregar= new JFrame("Agregar Persona");
-		else vAgregar= new JFrame("Editar Persona");
-		
-		//Colocación de los labels
-		label1= new JLabel("Nombre:");
-		label1.setBounds(15, 15,100,30);
-		label2= new JLabel("Apellido 1:");
-		label2.setBounds(15,50,100,30);
-		label3= new JLabel("Apellido 2:");
-		label3.setBounds(15,85,100,30);
-		label4= new JLabel("Teléfono: ");
-		label4.setBounds(15,120,100,30);
-		label5= new JLabel("E-mail:");
-		label5.setBounds(15,155,100,30);
-		label6 = new JLabel("Categoria:");
-		label6.setBounds(12,190,100,30);
-		
-		//Radio buttons para elegir la categoria de la persona a registrar
-		
-		rColega= new JRadioButton("Colega",true);
-		rColega.setBounds(80, 195, 70, 25);
-		rEstudiante= new JRadioButton("Estudiante");
-		rEstudiante.setBounds(150, 195, 90, 25);
-		rFamiliar= new JRadioButton("Familiar");
-		rFamiliar.setBounds(240, 195, 80, 25);
-		categoria.add(rColega); categoria.add(rEstudiante); categoria.add(rFamiliar);
-		if (numPer!=-1){int cate = Lista[indLista[numPer]].getCategoria();
-			if (cate==0){rColega.setSelected(true);}
-			else if (cate==1){rEstudiante.setSelected(true);}
-			else if (cate==2){rFamiliar.setSelected(true);}
+		/*Descripción: Función que maneja la ventana para agregar una persona
+		 * Entrada: Un int, si es 0 significa que va a agregar una nueva personas, sino es el número de persona a editar
+		 * Salida: Ninguna
+		 */
+		VentanaAgregar(int pNumPer){
+			numPer= pNumPer;
+			if(numPer==-1) vAgregar= new JFrame("Agregar Persona");
+			else vAgregar= new JFrame("Editar Persona");
 			
-		}
-		//Colocación de los de cuadros de entrada
-		
-		espacio1= new JTextField();
-		espacio1.setBounds(100,20,200,20);
-		soloLetras(espacio1);
-		if(numPer!=-1) espacio1.setText(Lista[indLista[numPer]].getNombre());
-		espacio2= new JTextField();
-		espacio2.setBounds(100,55,200,20);
-		soloLetras(espacio2);
-		if(numPer!=-1) espacio2.setText(Lista[indLista[numPer]].getApellido1());
-		espacio3= new JTextField();
-		espacio3.setBounds(100,90,200,20);
-		soloLetras(espacio3);
-		if(numPer!=-1) espacio3.setText(Lista[indLista[numPer]].getApellido2());
-		espacio4= new JTextField();
-		espacio4.setBounds(100,125,200,20);
-		soloNumeros(espacio4);
-		if(numPer!=-1) espacio4.setText(Integer.toString(Lista[indLista[numPer]].getTelefono()));
-		espacio5= new JTextField();
-		espacio5.setBounds(100,160,200,20);
-		if(numPer!=-1) espacio5.setText(Lista[indLista[numPer]].getCorreo());
-		
-		//Colocación y acción del botón
-		if(numPer==-1) boton= new JButton("Agregar");
-		else boton= new JButton("Editar");
-		boton.setBounds(100,235,125,25);
-		boton.setMnemonic(KeyEvent.VK_I);
-		boton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Personas humano= new Personas();	//Instancia
-				String palabra;
+			//Colocación de los labels
+			label1= new JLabel("Nombre:");
+			label1.setBounds(15, 15,100,30);
+			label2= new JLabel("Apellido 1:");
+			label2.setBounds(15,50,100,30);
+			label3= new JLabel("Apellido 2:");
+			label3.setBounds(15,85,100,30);
+			label4= new JLabel("Teléfono: ");
+			label4.setBounds(15,120,100,30);
+			label5= new JLabel("E-mail:");
+			label5.setBounds(15,155,100,30);
+			label6 = new JLabel("Categoria:");
+			label6.setBounds(12,190,100,30);
+			
+			//Radio buttons para elegir la categoria de la persona a registrar
+			
+			rColega= new JRadioButton("Colega",true);
+			rColega.setBounds(80, 195, 70, 25);
+			rEstudiante= new JRadioButton("Estudiante");
+			rEstudiante.setBounds(150, 195, 90, 25);
+			rFamiliar= new JRadioButton("Familiar");
+			rFamiliar.setBounds(240, 195, 80, 25);
+			categoria.add(rColega); categoria.add(rEstudiante); categoria.add(rFamiliar);
+			if (numPer!=-1){int cate = Lista[indLista[numPer]].getCategoria();
+				if (cate==0){rColega.setSelected(true);}
+				else if (cate==1){rEstudiante.setSelected(true);}
+				else if (cate==2){rFamiliar.setSelected(true);}
 				
-				palabra= espacio1.getText();
-				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 1 no puede estar vació");
-					vAgregar.dispose();
-					return;
-				}
-				humano.setNombre(palabra);
-				palabra= espacio2.getText();
-				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 2 no puede estar vació");
-					vAgregar.dispose();
-					return;
-				}
-				humano.setApellido1(palabra);
-				palabra= espacio3.getText();
-				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 3 no puede estar vació");
-					vAgregar.dispose();
-					return;
-				}
-				humano.setApellido2(palabra);
-				palabra= espacio4.getText();
-				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 4 no puede estar vació");
-					vAgregar.dispose();
-					return;
-				}
-				humano.setTelefono(Integer.parseInt(palabra));
-				palabra= espacio5.getText();
-				if(palabra.equals("")==true){
-					mensajeError("Error, no se pueden guardar los cambios","El espacio 5 no puede estar vació");
-					vAgregar.dispose();
-					return;
-				}
-				humano.setCorreo(palabra);
-				humano.setCategoria(0);
-				if (rColega.isSelected()==true){ humano.setCategoria(0);	
-				}
-				if (rEstudiante.isSelected()==true){ humano.setCategoria(1);	
-				}
-				else if (rFamiliar.isSelected()==true){ humano.setCategoria(2);	
-				}
-				if(numPer==-1)humano.Agregar("Reg_Pers.txt");
-				else humano.Editar(indLista[numPer]);
-				vAgregar.dispose();
-				cargarNombre();
-				ordenarLista(cantPers);
-				return;
 			}
-		});
-		//Se agregan los elementos
-		vAgregar.setLayout(null);
-		vAgregar.add(label1);
-		vAgregar.add(label2);
-		vAgregar.add(label3);
-		vAgregar.add(label4);
-		vAgregar.add(label5);
-		vAgregar.add(espacio1);
-		vAgregar.add(espacio2);
-		vAgregar.add(espacio3);
-		vAgregar.add(espacio4);
-		vAgregar.add(espacio5);
-		vAgregar.add(boton);
-		
+			//Colocación de los de cuadros de entrada
+			
+			espacio1= new JTextField();
+			espacio1.setBounds(100,20,200,20);
+			soloLetras(espacio1);
+			if(numPer!=-1) espacio1.setText(Lista[indLista[numPer]].getNombre());
+			espacio2= new JTextField();
+			espacio2.setBounds(100,55,200,20);
+			soloLetras(espacio2);
+			if(numPer!=-1) espacio2.setText(Lista[indLista[numPer]].getApellido1());
+			espacio3= new JTextField();
+			espacio3.setBounds(100,90,200,20);
+			soloLetras(espacio3);
+			if(numPer!=-1) espacio3.setText(Lista[indLista[numPer]].getApellido2());
+			espacio4= new JTextField();
+			espacio4.setBounds(100,125,200,20);
+			soloNumeros(espacio4);
+			if(numPer!=-1) espacio4.setText(Integer.toString(Lista[indLista[numPer]].getTelefono()));
+			espacio5= new JTextField();
+			espacio5.setBounds(100,160,200,20);
+			if(numPer!=-1) espacio5.setText(Lista[indLista[numPer]].getCorreo());
+			
+			//Colocación y acción del botón
+			if(numPer==-1) boton= new JButton("Agregar");
+			else boton= new JButton("Editar");
+			boton.setBounds(100,235,125,25);
+			boton.setMnemonic(KeyEvent.VK_I);
+			boton.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					Personas humano= new Personas();	//Instancia
+					String palabra;
+					
+					palabra= espacio1.getText();
+					if(palabra.equals("")==true){
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 1 no puede estar vació");
+						vAgregar.dispose();
+						return;
+					}
+					humano.setNombre(palabra);
+					palabra= espacio2.getText();
+					if(palabra.equals("")==true){
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 2 no puede estar vació");
+						vAgregar.dispose();
+						return;
+					}
+					humano.setApellido1(palabra);
+					palabra= espacio3.getText();
+					if(palabra.equals("")==true){
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 3 no puede estar vació");
+						vAgregar.dispose();
+						return;
+					}
+					humano.setApellido2(palabra);
+					palabra= espacio4.getText();
+					if(palabra.equals("")==true){
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 4 no puede estar vació");
+						vAgregar.dispose();
+						return;
+					}
+					humano.setTelefono(Integer.parseInt(palabra));
+					palabra= espacio5.getText();
+					if(palabra.equals("")==true){
+						new MensajeError("Error, no se pueden guardar los cambios","El espacio 5 no puede estar vació");
+						vAgregar.dispose();
+						return;
+					}
+					humano.setCorreo(palabra);
+					humano.setCategoria(0);
+					if (rColega.isSelected()==true){ humano.setCategoria(0);	
+					}
+					if (rEstudiante.isSelected()==true){ humano.setCategoria(1);	
+					}
+					else if (rFamiliar.isSelected()==true){ humano.setCategoria(2);	
+					}
+					if(numPer==-1)humano.Agregar("Reg_Pers.txt");
+					else humano.Editar(indLista[numPer]);
+					vAgregar.dispose();
+					cargarNombre();
+					ordenarLista(cantPers);
+					return;
+				}
+			});
+			//Se agregan los elementos
+			vAgregar.setLayout(null);
+			vAgregar.add(label1);
+			vAgregar.add(label2);
+			vAgregar.add(label3);
+			vAgregar.add(label4);
+			vAgregar.add(label5);
+			vAgregar.add(espacio1);
+			vAgregar.add(espacio2);
+			vAgregar.add(espacio3);
+			vAgregar.add(espacio4);
+			vAgregar.add(espacio5);
+			vAgregar.add(boton);
+			
 
-		vAgregar.add(rColega);
-		vAgregar.add(rEstudiante);
-		vAgregar.add(rFamiliar);
-		
-		vAgregar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
-		vAgregar.setSize(350,310);	//Tamaño de la ventana
-		vAgregar.setVisible(true);
-		vAgregar.setResizable(false);
+			vAgregar.add(rColega);
+			vAgregar.add(rEstudiante);
+			vAgregar.add(rFamiliar);
+			
+			vAgregar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
+			vAgregar.setSize(350,310);	//Tamaño de la ventana
+			vAgregar.setVisible(true);
+			vAgregar.setResizable(false);
+		}
 	}
 	
-	/*Descripción: Función que crea la ventana de eliminación de una persona
-	 * Entrada: Int número de persona a eliminar
-	 * Salida: Ninguna
-	 */
-	private void ventanaEliminar(int numPer){
+	class VentanaEliminar{
 		JFrame vEliminar= new JFrame("Eliminar Persona");
 		JLabel mensaje= new JLabel("¿Esta seguro de eliminar a la persona del registro?");
 		JButton aceptar= new JButton("Aceptar");
 		JButton cancelar= new JButton("Cancelar");
 		Personas humano= new Personas();
+		int numPer;
 		
-		mensaje.setBounds(30,20,300,25);
-		aceptar.setBounds(85,50,90,25);
-		aceptar.setMnemonic(KeyEvent.VK_I);
-		aceptar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				humano.eliminar(indLista[numPer]);
-				vEliminar.dispose();
-				cantPers--;
-				cargarNombre();
-				ordenarLista(cantPers);
-				return;
-			}
-		});
-		cancelar.setBounds(195,50,90,25);
-		cancelar.setMnemonic(KeyEvent.VK_I);
-		cancelar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vEliminar.dispose();
-				return;
-			}
-		});
-		
-		vEliminar.setLayout(null);
-		vEliminar.add(mensaje);
-		vEliminar.add(aceptar);
-		vEliminar.add(cancelar);
-		
-		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
-		vEliminar.setSize(360,120);
-		vEliminar.setVisible(true);
-		vEliminar.setResizable(false);
+		/*Descripción: Función que crea la ventana de eliminación de una persona
+		 * Entrada: Int número de persona a eliminar
+		 * Salida: Ninguna
+		 */
+		VentanaEliminar(int pNumPer){
+			numPer= pNumPer;
+			mensaje.setBounds(30,20,300,25);
+			aceptar.setBounds(85,50,90,25);
+			aceptar.setMnemonic(KeyEvent.VK_I);
+			aceptar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					humano.eliminar(indLista[numPer]);
+					vEliminar.dispose();
+					cantPers--;
+					cargarNombre();
+					ordenarLista(cantPers);
+					return;
+				}
+			});
+			cancelar.setBounds(195,50,90,25);
+			cancelar.setMnemonic(KeyEvent.VK_I);
+			cancelar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vEliminar.dispose();
+					return;
+				}
+			});
+			
+			vEliminar.setLayout(null);
+			vEliminar.add(mensaje);
+			vEliminar.add(aceptar);
+			vEliminar.add(cancelar);
+			
+			vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+			vEliminar.setSize(360,120);
+			vEliminar.setVisible(true);
+			vEliminar.setResizable(false);
+		}
 	}
 	
-	/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
-	 * debido a que tiene un articulo prestado
-	 * Entrada: Ninguna
-	 * Salida: Ninguna
-	 */
-	private void mensajeError(String msg1, String msg2){
+	class MensajeError{
 		JFrame vEliminar= new JFrame("Mensaje de Error");
-		JLabel mensaje= new JLabel(msg1);
-		JLabel mensaje1= new JLabel(msg2);
+		JLabel mensaje;
+		JLabel mensaje1;
 		JButton aceptar= new JButton("Aceptar");
-		
-		mensaje.setBounds(30,20,300,25);
-		mensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		mensaje1.setBounds(30, 45, 300, 25);
-		mensaje1.setHorizontalAlignment(SwingConstants.CENTER);
-		aceptar.setBounds(135,80,90,25);
-		aceptar.setMnemonic(KeyEvent.VK_I);
-		aceptar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vEliminar.dispose();
-				return;
-			}
-		});
-		
-		vEliminar.setLayout(null);
-		vEliminar.add(mensaje);
-		vEliminar.add(mensaje1);
-		vEliminar.add(aceptar);
-		
-		vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
-		vEliminar.setSize(360,150);
-		vEliminar.setVisible(true);
-		vEliminar.setResizable(false);
+		/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
+		 * debido a que tiene un articulo prestado
+		 * Entrada: Ninguna
+		 * Salida: Ninguna
+		 */
+		MensajeError(String msg1, String msg2){
+			mensaje= new JLabel(msg1);
+			mensaje1= new JLabel(msg2);
+			mensaje.setBounds(30,20,300,25);
+			mensaje.setHorizontalAlignment(SwingConstants.CENTER);
+			mensaje1.setBounds(30, 45, 300, 25);
+			mensaje1.setHorizontalAlignment(SwingConstants.CENTER);
+			aceptar.setBounds(135,80,90,25);
+			aceptar.setMnemonic(KeyEvent.VK_I);
+			aceptar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vEliminar.dispose();
+					return;
+				}
+			});
+			
+			vEliminar.setLayout(null);
+			vEliminar.add(mensaje);
+			vEliminar.add(mensaje1);
+			vEliminar.add(aceptar);
+			
+			vEliminar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+			vEliminar.setSize(360,150);
+			vEliminar.setVisible(true);
+			vEliminar.setResizable(false);
+		}
 	}
+	
 	
 	private void ventanaImportar(){
 		Personas humano= new Personas();
@@ -463,7 +473,7 @@ public class VentanaPer {
 		botonAgregar.setMnemonic(KeyEvent.VK_I);
 		botonAgregar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				ventanaPersona(-1);
+				new VentanaAgregar(-1);
 			}
 		});
 		botonEditar= new JButton("Editar");
@@ -473,7 +483,7 @@ public class VentanaPer {
 		botonEditar.setMnemonic(KeyEvent.VK_I);
 		botonEditar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				ventanaPersona(tabla.getSelectedRow());
+				new VentanaAgregar(tabla.getSelectedRow());
 			}
 		});
 		botonEliminar= new JButton("Eliminar");
@@ -484,8 +494,8 @@ public class VentanaPer {
 		botonEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				//Si tiene un articulo prestado
-				if(Lista[indLista[tabla.getSelectedRow()]].isPoseeArticulo()==true) mensajeError("Error, la persona no puede ser eliminada","Posee un articulo prestado"); 
-				else ventanaEliminar(tabla.getSelectedRow());
+				if(Lista[indLista[tabla.getSelectedRow()]].isPoseeArticulo()==true) new MensajeError("Error, la persona no puede ser eliminada","Posee un articulo prestado"); 
+				else new VentanaEliminar(tabla.getSelectedRow());
 			}
 		});
 		botonBuscar= new JButton("Buscar");
