@@ -1,21 +1,16 @@
 package logicaInterfaz;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JRadioButton;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -23,7 +18,6 @@ import javax.swing.table.TableColumnModel;
 import logicaPrograma.Articulo;
 import logicaPrograma.Libros;
 import logicaPrograma.Pelicula;
-import logicaPrograma.Personas;
 import logicaPrograma.Prestamo;
 import logicaPrograma.Revista;
 
@@ -36,10 +30,10 @@ class VentanaTop{
 	private Prestamo Lista[]= new Prestamo[120];
 	private int indLista[]= new int[120];
 	private int cantLista[]= new int[120];
-	private JButton botonDevolver, botonDia,botonBuscar;
-	private JTextField cuadroBusc;
-	private JRadioButton rNombre, rArticulo,rTipo;
-	private ButtonGroup grupoBusqueda = new ButtonGroup();
+	private JButton botonTop;
+	private String [] opciones= {"5","10","15","20","25"};
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private JComboBox options= new JComboBox(opciones);
 	
 	
 	//DEFINICIÓN DE MÉTODOS
@@ -67,92 +61,17 @@ class VentanaTop{
 			nombreLista.setValueAt(i, 3, "");
 			i++;
 		}
-	}
-	
-	//No implementado aun
-	private void filtrarLista(){
-		int i=0;
-		int j=0;
-		String hilera= cuadroBusc.getText();
-		String palabra= null;
-		String aux= null;
-		Personas tempPer= null;
-		Articulo tempArtic= null;
-		
-		cargarNombre();
-		//ordenarLista(cantPrestamos);
-		//Si el cuadro de búsqueda no tiene escrito nada
-		if(hilera.equals("")==true){
-			return;
-		}
-		while(i<cantPrestamos){
-			if(i == cantPrestamos) break;
-			//Si la búsqueda es de nombre de la persona
-			if(rNombre.isSelected()==true){
-				tempPer= new Personas();
-				tempPer.Obtener(Lista[i].getNumeroPersona(), "Reg_Pers.txt");
-				palabra= tempPer.getNombre()+" "+tempPer.getApellido1();
-			}
-			//Si la búsqueda es de nombre del artículo
-			else if(rArticulo.isSelected()==true){
-				if(Lista[i].getTipoArticulo().equals("Libro")) {
-					tempArtic= new Libros();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Libros.txt");
-				}
-				else if(Lista[i].getTipoArticulo().equals("Revista")) {
-					tempArtic= new Revista();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Revistas.txt");
-				}
-				else if(Lista[i].getTipoArticulo().equals("Pelicula")){
-					tempArtic= new Pelicula();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Peliculas.txt");
-				}
-				palabra= tempArtic.getNombre();
-			}
-			//Si la búsqueda es de tipo del artículo
-			else if(rTipo.isSelected()==true) palabra= Lista[i].getTipoArticulo();
-			if(hilera.startsWith(palabra)==true){
-				//Obtención y carga del nombre del artículo
-				if(Lista[i].getTipoArticulo().equals("Libro")) {
-					tempArtic= new Libros();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Libros.txt");
-				}
-				else if(Lista[i].getTipoArticulo().equals("Revista")) {
-					tempArtic= new Revista();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Revistas.txt");
-				}
-				else if(Lista[i].getTipoArticulo().equals("Pelicula")){
-					tempArtic= new Pelicula();
-					tempArtic.Obtener(Lista[i].getNumeroArticulo(), "Peliculas.txt");
-				}
-				aux= tempArtic.getNombre();
-				nombreLista.setValueAt(j, 0, aux);
-				//Obtención y carga del tipo de Artículo
-				nombreLista.setValueAt(j, 1, Lista[i].getTipoArticulo());
-				//Obtención y carga del nombre de Persona
-				tempPer= new Personas();
-				tempPer.Obtener(Lista[i].getNumeroPersona(), "Reg_Pers.txt");
-				aux= tempPer.getNombre()+" "+tempPer.getApellido1();
-				nombreLista.setValueAt(j, 2, aux);
-				//Obtención y carga de la cantidad de días del préstamo
-				nombreLista.setValueAt(j, 3, Integer.toString(Lista[i].getCantDias()));
-				indLista[j]= i;
-				//System.out.println(Lista);
-				j++;
-			}
+		i=0;
+		while(i<120){
+			cantLista[i]=0;
 			i++;
 		}
-		cantPrestamos= j;
-		while(j<120){
-			nombreLista.setValueAt(j, 0, "");
-			nombreLista.setValueAt(j, 1, "");
-			nombreLista.setValueAt(j, 2, "");
-			nombreLista.setValueAt(j, 3, "");
-			indLista[j]=0;
-			j++;
-		}
 	}
 	
+	/*Descripción: Método que ejecuta el ordenamiento Burbuja mayor a menor la lista de elementos prestados
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
 	private void ordenamientoBurbuja(){
 		int i=0;
 		int temp;
@@ -195,12 +114,12 @@ class VentanaTop{
 	 */
 	private void cargarNombre(){
 		Prestamo temp= new Prestamo();
-		Personas tempPer= new Personas();
 		Articulo tempArtic= null;
 		String palabra= null;
 		int bool=0;
 		limpiarListas();	//Limpia el contenido de los arrays
 		int i= 0;
+		int cant=0;
 		while(true){
 			//Obtiene en las clases sus atributos hasta que ya no encuentra más en disco
 			if(temp.Obtener(i+1, "Prestamos.txt") == false){break;}
@@ -214,6 +133,7 @@ class VentanaTop{
 				Lista[i].setTipoArticulo(temp.getTipoArticulo());
 				cantLista[i]++;
 				indLista[i]= i;
+				cant++;
 			}
 			//Si encontró el elemento repetido
 			else{
@@ -221,11 +141,11 @@ class VentanaTop{
 			}
 			i++;
 		}		
-		cantPrestamos= i;
+		cantPrestamos= cant;
 		ordenamientoBurbuja();	//Ordena de mayor a menor la lista
 		i=0;
 		//Coloca en la tabla los elementos a mostrar
-		while(i<top){
+		while(i<top && i<cantPrestamos){
 			nombreLista.setValueAt(i, 0, Integer.toString(i+1));
 			if(Lista[indLista[i]].getTipoArticulo().equals("Libro")) {
 				tempArtic= new Libros();
@@ -275,8 +195,9 @@ class VentanaTop{
 	//Constructor
 	VentanaTop(){
 		JFrame ventana= new JFrame("Top de artículos prestados");
+		JLabel label1= new JLabel("Número del Top:");
 		
-		//colocarBotones();
+		botonTop= new JButton("Cambiar Top");
 		//Modificación de los headers de la tabla
 		JTableHeader th = tabla.getTableHeader();
 		TableColumnModel tcm = th.getColumnModel();
@@ -292,17 +213,30 @@ class VentanaTop{
 		
 		cargarNombre();
 		
-		cuadroBusc= new JTextField();
-		cuadroBusc.setBounds(380,95,170,25);
+		label1.setBounds(10,110,125,25);
+		options.setBounds(10,140,125,25);
+		options.setSelectedIndex(1);
+		
+		botonTop.setBounds(10,171,125,25);
+		botonTop.setMnemonic(KeyEvent.VK_I);
+		botonTop.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				top= Integer.parseInt(opciones[options.getSelectedIndex()]);
+				cargarNombre();
+			}
+		});
 		
 		JScrollPane barraDesplazamiento = new JScrollPane(tabla);
-		barraDesplazamiento.setBounds(150,130,500,260);
+		barraDesplazamiento.setBounds(150,110,500,260);
 		
 		ventana.setLayout(null);
 		ventana.add(barraDesplazamiento);
+		ventana.add(label1);
+		ventana.add(options);
+		ventana.add(botonTop);
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
-		ventana.setSize(675,450);	//Tamaño de la ventana
+		ventana.setSize(675,430);	//Tamaño de la ventana
 		ventana.setVisible(true);
 		ventana.setResizable(false);
 	}

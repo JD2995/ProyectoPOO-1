@@ -124,6 +124,10 @@ public class VentanaArticulos {
 		}
 	}
 	
+	/*Descripción: Método que analiza si un artículo está prestado
+	 * Entrada: Entero con el índice del artículo en el registro
+	 * Salida: True si está prestado, false si no lo está
+	 */
 	private boolean isPrestado(int numArtic){
 		int i=0;
 		Prestamo tempPrestamo= new Prestamo();
@@ -135,6 +139,10 @@ public class VentanaArticulos {
 		return false;
 	}
 	
+	/*Descripción: Método que devuelve la cantidad de veces prestada de determinado articulo
+	 * Entrada: Entero con el índice del artículo en el registro
+	 * Salida: Entero con la cantidad de prestamos del artículo
+	 */
 	private int cantPrestado(int numArtic){
 		int i=0;
 		int cant=0;
@@ -371,6 +379,7 @@ public class VentanaArticulos {
 			}
 		}
 		
+		//Constructor
 		VentanaAgregar(int pnumArtic){
 			numArtic= pnumArtic;
 			
@@ -550,9 +559,9 @@ public class VentanaArticulos {
 	}
 	
 	class MensajeError{
-		/*Descripción: Despliega una ventana diciendo que no se puede eliminar la personana
-		 * debido a que tiene un articulo prestado
-		 * Entrada: Ninguna
+		/*Descripción: Despliega una ventana diciendo un mensaje de error
+		 * Entrada: String con la primera parte del mensaje de error
+		 * 			String con la segunda parte del mensaje de erro
 		 * Salida: Ninguna
 		 */
 		JFrame vEliminar= new JFrame("Mensaje de Error");

@@ -1,11 +1,12 @@
 package logicaInterfaz;
 import java.awt.event.*;
-
 import javax.swing.*;
+import logicaPrograma.Prestamo;
 
 public class Ventana1{
 	private JButton Bpersonas, Blibros, Bprestamos, Btop, Brango;
 	private boolean ventanaAbierta= false;
+	public static boolean principio= false;
 	String [] opciones= {"Libros","Revistas","Peliculas"};
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	JComboBox options= new JComboBox(opciones);
@@ -37,6 +38,7 @@ public class Ventana1{
 	public Ventana1(String title){
 		JFrame ventana= new JFrame(title);
 		JLabel label1= new JLabel("Tipo de Articulo:");
+		Prestamo prest= new Prestamo();
 		
 		//Definición de los botones
 		Bpersonas= new JButton("Consultar Personas");
@@ -110,11 +112,18 @@ public class Ventana1{
 		ventana.add(options);
 		ventana.add(label1);
 		
+		ventana.setLocation(500, 200);
+		
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(545,405);	//Tamaño de la ventana
 		ventana.setVisible(true);
 		ventana.setResizable(false);
 		
+		//Si existe al menos un préstamo
+		if(prest.Existe_p(1, "Prestamos.txt")){
+			principio= true;
+			new VentanaPrestamos();
+		}
 	}
 }
 
