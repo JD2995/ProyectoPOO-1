@@ -78,49 +78,52 @@ public class VentanaPrestamos {
 		}
 	}
 	
-	/*Descripción: Método que abre una ventana preguntando si se desea enviar los recordatorios
-	 * Entrada: Ninguna
-	 * Salida: Ninguna
-	 */
-	private void mensajeEnviar(){
+	class MensajeEnviar{
 		JFrame vEnviar= new JFrame("Envio de recordatorios");
 		JLabel mensaje= new JLabel("¿Desea enviar un mensaje de recordatorio?");
 		JButton aceptar= new JButton("Aceptar");
 		JButton cancelar= new JButton("Cancelar");
 		
+		/*Descripción: Método que abre una ventana preguntando si se desea enviar los recordatorios
+		 * Entrada: Ninguna
+		 * Salida: Ninguna
+		 */
+		public MensajeEnviar(){			
+			mensaje.setBounds(30,20,300,25);
+			mensaje.setHorizontalAlignment(SwingConstants.CENTER);
+			aceptar.setBounds(85,50,90,25);
+			aceptar.setMnemonic(KeyEvent.VK_I);
+			aceptar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vEnviar.dispose();
+					enviarCorreo();		//Envia correos a las personas
+					return;
+				}
+			});
+			cancelar.setBounds(195,50,90,25);
+			cancelar.setMnemonic(KeyEvent.VK_I);
+			cancelar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					vEnviar.dispose();
+					return;
+				}
+			});
+			
+			vEnviar.setLayout(null);
+			vEnviar.add(mensaje);
+			vEnviar.add(aceptar);
+			vEnviar.add(cancelar);
+			
+			vEnviar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
+			vEnviar.setSize(360,120);
+			vEnviar.setLocation(300, 220);
+			vEnviar.setVisible(true);
+			vEnviar.setResizable(false);
+		}
+
 		
-		mensaje.setBounds(30,20,300,25);
-		mensaje.setHorizontalAlignment(SwingConstants.CENTER);
-		aceptar.setBounds(85,50,90,25);
-		aceptar.setMnemonic(KeyEvent.VK_I);
-		aceptar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vEnviar.dispose();
-				enviarCorreo();		//Envia correos a las personas
-				return;
-			}
-		});
-		cancelar.setBounds(195,50,90,25);
-		cancelar.setMnemonic(KeyEvent.VK_I);
-		cancelar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				vEnviar.dispose();
-				return;
-			}
-		});
-		
-		vEnviar.setLayout(null);
-		vEnviar.add(mensaje);
-		vEnviar.add(aceptar);
-		vEnviar.add(cancelar);
-		
-		vEnviar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
-		vEnviar.setSize(360,120);
-		vEnviar.setLocation(300, 220);
-		vEnviar.setVisible(true);
-		vEnviar.setResizable(false);
 	}
-	
+		
 	class MensajeError{
 		/*Descripción: Despliega una ventana diciendo un mensaje de error
 		 * Entrada: String con la primera parte del mensaje de error
@@ -507,7 +510,7 @@ public class VentanaPrestamos {
 					tolerancia1= Integer.parseInt(toler1.getText());
 					tolerancia2= Integer.parseInt(toler2.getText());
 					cargarNombre();
-					mensajeEnviar();
+					new MensajeEnviar();
 				}
 			}
 		});
@@ -661,7 +664,7 @@ public class VentanaPrestamos {
 		//Si la ventana fue abierta al inicio de la aplicación
 		if(Ventana1.principio == true){
 			Ventana1.principio= false;
-			mensajeEnviar();
+			new MensajeEnviar();
 		}
 	}
 
