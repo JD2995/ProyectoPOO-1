@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -15,6 +17,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -951,9 +954,19 @@ public class VentanaArticulos {
 	VentanaArticulos(int mode){
 		JFrame ventana= new JFrame("Lista de Artículos");
 		JScrollPane barraDesplazamiento = new JScrollPane(tabla);
+		ImageIcon logo= new ImageIcon("logo.png");
+		JLabel iLogo= new JLabel(logo);
 		cuadroImage= new JPanel(new BorderLayout());
 		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		cellSelectionModel.addListSelectionListener(new ListenerTabla());
+		BufferedImage img1= null;
+		
+		try{
+			img1= ImageIO.read(new File("logo.png"));
+		}
+		catch(IOException e1){
+			
+		}
 		
 		modo= mode;
 		barraDesplazamiento.setBounds(150,130,500,290); 
@@ -987,6 +1000,9 @@ public class VentanaArticulos {
 		cuadroImage.setBorder(BorderFactory.createLineBorder(Color.black));
 		cuadroImage.setBounds(45, 130, 90, 135);
 		
+		//Colocación del logo
+		iLogo.setBounds(20,15,70,65);
+		
 		//radio buttons para la busqueda de libros
 		rNomLibro = new JRadioButton("Nombre",true);
 		rNomLibro.setBounds(130,90,70,25);
@@ -1014,8 +1030,9 @@ public class VentanaArticulos {
 		ventana.add(rNomLibro);
 		ventana.add(rGenLibro);
 		ventana.add(rCalLibro);
+		ventana.add(iLogo);
 		
-		
+		ventana.setIconImage(img1);
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(675,480);	//Tamaño de la ventana
 		ventana.setVisible(true);

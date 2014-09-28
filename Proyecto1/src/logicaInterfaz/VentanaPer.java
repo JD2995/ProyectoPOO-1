@@ -3,8 +3,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
@@ -548,7 +552,16 @@ public class VentanaPer {
 	public VentanaPer(){
 		JFrame ventana= new JFrame("Lista de Personas");
 		JLabel contPers;
+		ImageIcon logo= new ImageIcon("logo.png");
+		JLabel iLogo= new JLabel(logo);
+		BufferedImage img= null;
 		
+		try{
+			img= ImageIO.read(new File("logo.png"));
+		}
+		catch(IOException e){
+			
+		}
 		
 		//Modificación de los headers de la tabla
 		JTableHeader th = tabla.getTableHeader();
@@ -572,10 +585,12 @@ public class VentanaPer {
 		cuadroBusc= new JTextField();
 		cuadroBusc.setBounds(380,95,170,25);
 		
+		iLogo.setBounds(20,15,70,65);
 		contPers.setBounds(0,440,150,25);
 		
 		ventana.setLayout(null);
 		ventana.add(contPers);
+		ventana.setIconImage(img);
 		ventana.add(botonAgregar);
 		ventana.add(botonEditar);
 		ventana.add(botonEliminar);
@@ -586,6 +601,7 @@ public class VentanaPer {
 		ventana.add(rApellido2);
 		ventana.add(barraDesplazamiento);
 		ventana.add(cuadroBusc);
+		ventana.add(iLogo);
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(675,450);	//Tamaño de la ventana

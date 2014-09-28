@@ -7,7 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -582,6 +586,16 @@ public class VentanaPrestamos {
 	VentanaPrestamos(){
 		JFrame ventana= new JFrame("Consulta de Préstamos");
 		JLabel label1,label2;
+		ImageIcon logo= new ImageIcon("logo.png");
+		JLabel iLogo= new JLabel(logo);
+		BufferedImage img= null;
+		
+		try{
+			img= ImageIO.read(new File("logo.png"));
+		}
+		catch(IOException e){
+			
+		}
 		
 		colocarBotones();
 		//Modificación de los headers de la tabla
@@ -619,7 +633,11 @@ public class VentanaPrestamos {
 		JScrollPane barraDesplazamiento = new JScrollPane(tabla);
 		barraDesplazamiento.setBounds(150,130,500,260);
 		
+		//Colocación del logo
+		iLogo.setBounds(20,15,70,65);
+		
 		ventana.setLayout(null);
+		ventana.setIconImage(img);
 		ventana.add(barraDesplazamiento);
 		ventana.add(botonDevolver);
 		ventana.add(botonDia);
@@ -633,6 +651,7 @@ public class VentanaPrestamos {
 		ventana.add(label2);
 		ventana.add(toler1);
 		ventana.add(toler2);
+		ventana.add(iLogo);
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(675,450);	//Tamaño de la ventana

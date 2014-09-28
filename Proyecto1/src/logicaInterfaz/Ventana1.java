@@ -1,6 +1,12 @@
 package logicaInterfaz;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import logicaPrograma.Prestamo;
 
 public class Ventana1{
@@ -38,7 +44,17 @@ public class Ventana1{
 	public Ventana1(String title){
 		JFrame ventana= new JFrame(title);
 		JLabel label1= new JLabel("Tipo de Articulo:");
+		ImageIcon logo= new ImageIcon("logo.png");
+		JLabel iLogo= new JLabel(logo);
 		Prestamo prest= new Prestamo();
+		BufferedImage img= null;
+		
+		try{
+			img= ImageIO.read(new File("logo.png"));
+		}
+		catch(IOException e){
+			
+		}
 		
 		//Definición de los botones
 		Bpersonas= new JButton("Consultar Personas");
@@ -55,6 +71,9 @@ public class Ventana1{
 		options.setSelectedIndex(0);
 		options.setBounds(420,65,100,25);
 		label1.setBounds(320,65,100,25);
+		
+		//Colocación del logo
+		iLogo.setBounds(20,10,70,65);
 		
 		//Colocación de características de los botones
 		Bpersonas.setBounds(20, 100, 500, 50);
@@ -111,9 +130,10 @@ public class Ventana1{
 		ventana.add(Brango);
 		ventana.add(options);
 		ventana.add(label1);
+		ventana.add(iLogo);
 		
 		ventana.setLocation(500, 200);
-		
+		ventana.setIconImage(img);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	//Finalizar la tarea cuando se cierre la ventana
 		ventana.setSize(545,405);	//Tamaño de la ventana
 		ventana.setVisible(true);
