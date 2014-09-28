@@ -135,8 +135,12 @@ public class VentanaArticulos {
 		int i=0;
 		Prestamo tempPrestamo= new Prestamo();
 		while(true){
-			if(tempPrestamo.Obtener(i, "Prestamos.txt") == false) break;
-			if(tempPrestamo.getNumeroArticulo()==numArtic)return true;
+			if(tempPrestamo.Obtener(i+1, "Prestamos.txt") == false) break;
+			if(tempPrestamo.getNumeroArticulo()==numArtic){
+				if(tempPrestamo.getTipoArticulo().equals("Libro") && modo == 0)return true;
+				else if(tempPrestamo.getTipoArticulo().equals("Revista") && modo == 1)return true;
+				else if(tempPrestamo.getTipoArticulo().equals("Pelicula") && modo == 2)return true;
+			}
 			i++;
 		}
 		return false;
@@ -522,6 +526,10 @@ public class VentanaArticulos {
 		}
 	}
 		
+	/*Descripción: Método que filtra la lista de acuerdo a la búsqueda que se realice
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
 	private void buscarLista(){
 		int i=0;
 		int j=0;
@@ -561,6 +569,7 @@ public class VentanaArticulos {
 		}
 	}
 	
+	//Clase para enviar mensaje de error
 	class MensajeError{
 		/*Descripción: Despliega una ventana diciendo un mensaje de error
 		 * Entrada: String con la primera parte del mensaje de error
@@ -600,6 +609,7 @@ public class VentanaArticulos {
 		}
 	}
 	
+	//Clase para mostrar la ventana de confirmación de eliminación
 	class VentanaEliminar{
 		JFrame vEliminar= new JFrame("Eliminar Articulo");
 		JLabel mensaje= new JLabel("¿Esta seguro de eliminar al articulo del registro?");
@@ -608,7 +618,7 @@ public class VentanaArticulos {
 		Articulo articulo= new Libros();
 		int numArtic;
 		
-		/*Descripción: Función que crea la ventana de eliminación de una persona
+		/*Descripción: Constructor que crea la ventana de eliminación de una persona
 		 * Entrada: Int número de persona a eliminar
 		 * Salida: Ninguna
 		 */
@@ -650,20 +660,29 @@ public class VentanaArticulos {
 		}
 	}
 	
+	/*Descripción: Método que se encarga de mostrar la ventana para la búsqueda de la imagen a importar
+	 * Entrada: Ninguna
+	 * Salida: String con la dirección del archivo seleccionado
+	 */
 	private String ventanaImagen(){
 		JFrame vImportar= new JFrame("Ventana");
 		JFileChooser archivo= new JFileChooser();
 		String hilera= null;
 		
+		//Muestra la ventana de búsqueda
 		archivo.showOpenDialog(vImportar);
 		try{
-			hilera=archivo.getSelectedFile().getAbsolutePath();
+			hilera=archivo.getSelectedFile().getAbsolutePath(); //Intenta obtener la dirección como String
 		}
 		catch(Exception e){hilera= null;}
 		vImportar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
 		return hilera;
 	}
 	
+	/*Descripción: Método que maneja la ventana para la importanción de registros externos
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
 	private void ventanaImportar(){
 		Articulo articulo= null;
 		JFrame vImportar= new JFrame("Ventana");
@@ -680,6 +699,10 @@ public class VentanaArticulos {
 		vImportar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Cerrar la ventana
 	}
 	
+	/*Descripción: Método que carga las personas en la lista para prestar un artículo
+	 * Entrada: Ninguna
+	 * Salida: Ninguna
+	 */
 	private void CargarPersonas(){
 		Personas temp= new Personas();
 		int i= 0;
@@ -703,6 +726,10 @@ public class VentanaArticulos {
 		cantPers= i;
 	}
 	
+	/*Descripción: Método para ordenar alfabéticamente a las personas en la lista
+	 * Entrada: Entero con la cantidad de personas
+	 * Salida: Ninguna
+	 */
 	private void ordenarPers(int cant){
 		int i=1;
 		int indAux;

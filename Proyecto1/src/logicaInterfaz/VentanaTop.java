@@ -176,8 +176,11 @@ class VentanaTop{
 	}
 	
 	//Clase para los objetos de la tabla de préstamos
-		@SuppressWarnings("serial")
 		class ModeloDatos extends AbstractTableModel{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			Object datos[][]= new Object[120][4];
 
 			public int getColumnCount() {

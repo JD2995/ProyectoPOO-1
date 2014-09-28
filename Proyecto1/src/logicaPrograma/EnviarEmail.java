@@ -8,11 +8,10 @@ import javax.mail.internet.*;
 
 public class EnviarEmail {
 	//DEFINICIÓN DE ATRIBUTOS
-	String to, from, asunto,cuerpo;
-	String host = "smtp.gmail.com";
-	Properties properties= System.getProperties();
-	Session sesion;
-	MimeMessage mensaje;
+	private String to, from, asunto,cuerpo;
+	private Properties properties= System.getProperties();
+	private Session sesion;
+	private MimeMessage mensaje;
 	
 	
 	//DEFINICION DE MÉTODOS

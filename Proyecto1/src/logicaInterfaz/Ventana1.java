@@ -10,7 +10,7 @@ import javax.swing.*;
 import logicaPrograma.Prestamo;
 
 public class Ventana1{
-	private JButton Bpersonas, Blibros, Bprestamos, Btop, Brango;
+	private JButton Bpersonas, Blibros, Bprestamos, Btop, BNoPrestados;
 	private boolean ventanaAbierta= false;
 	public static boolean principio= false;
 	String [] opciones= {"Libros","Revistas","Peliculas"};
@@ -36,8 +36,12 @@ public class Ventana1{
 	}
 	
 	private void consTop(){
-		@SuppressWarnings("unused")
-		VentanaTop ventana2= new VentanaTop();
+		new VentanaTop();
+		ventanaAbierta= false;
+	}
+	
+	private void consNPrest(){
+		new VentanaNoPrestado(options.getSelectedIndex());
 		ventanaAbierta= false;
 	}
 	
@@ -65,8 +69,8 @@ public class Ventana1{
 		ImageIcon ImagePrest= new ImageIcon("Prestamos.gif");
 		Btop= new JButton("Consultar Top de préstamos");
 		ImageIcon ImageTop= new ImageIcon("Top.gif");
-		Brango= new JButton("Libros prestados dentro de un rango");
-		ImageIcon ImageRango= new ImageIcon("Rango.gif");
+		BNoPrestados= new JButton("Consultar artículos no prestados");
+		ImageIcon ImageRango= new ImageIcon("noPrestado.gif");
 		
 		options.setSelectedIndex(0);
 		options.setBounds(420,65,100,25);
@@ -98,9 +102,7 @@ public class Ventana1{
 				}
 			}
 		});
-		Bprestamos.setBounds(20,204,500,50);
-		Bprestamos.setIcon(ImagePrest);
-		Btop.setBounds(20,256,500,50);
+		Btop.setBounds(20,308,500,50);
 		Btop.setIcon(ImageTop);
 		Btop.setMnemonic(KeyEvent.VK_I);
 		Btop.addActionListener(new ActionListener(){
@@ -111,7 +113,8 @@ public class Ventana1{
 				}
 			}
 		});
-		Brango.setBounds(20,308,500,50);
+		Bprestamos.setBounds(20,204,500,50);
+		Bprestamos.setIcon(ImagePrest);
 		Bprestamos.setMnemonic(KeyEvent.VK_I);
 		Bprestamos.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -121,13 +124,23 @@ public class Ventana1{
 				}
 			}
 		});
-		Brango.setIcon(ImageRango);
+		BNoPrestados.setBounds(20,256,500,50);
+		BNoPrestados.setIcon(ImageRango);
+		BNoPrestados.setMnemonic(KeyEvent.VK_I);
+		BNoPrestados.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(ventanaAbierta==false){
+					ventanaAbierta= true;
+					consNPrest();
+				}
+			}
+		});
 		ventana.setLayout(null);
 		ventana.add(Blibros);
 		ventana.add(Bpersonas);
 		ventana.add(Bprestamos);
 		ventana.add(Btop);
-		ventana.add(Brango);
+		ventana.add(BNoPrestados);
 		ventana.add(options);
 		ventana.add(label1);
 		ventana.add(iLogo);
