@@ -503,6 +503,7 @@ public class VentanaPrestamos {
 					tolerancia1= Integer.parseInt(toler1.getText());
 					tolerancia2= Integer.parseInt(toler2.getText());
 					cargarNombre();
+					mensajeEnviar();
 				}
 			}
 		});
