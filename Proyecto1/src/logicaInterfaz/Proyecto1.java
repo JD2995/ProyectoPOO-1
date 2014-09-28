@@ -1,5 +1,7 @@
 /* Primer Proyecto Programado
- * Alumno= Javier Rivas Lozano, Carne= 2013051762
+ * Alumno= Javier Rivas Lozano, Carné= 2013051762
+ * 		   Jostin Marín Mena,  Carné=  2014108920
+ * 		   Jaicol Allen Segura, Carné= 2014129832
  * Programación Orientada a Objetos
  */
 package logicaInterfaz;

@@ -462,7 +462,7 @@ public class VentanaArticulos {
 				espacio[6]= new JTextField();
 				if(numArtic!= -1) espacio[6].setText(((Libros) Lista[indLista[numArtic]]).getEdicion());
 				espacio[6].setBounds(220,258,200,20);
-				soloLetras(espacio[6]);
+				
 			}
 			
 			//Colocación de botones

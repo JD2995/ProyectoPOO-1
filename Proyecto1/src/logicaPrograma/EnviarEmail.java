@@ -45,6 +45,7 @@ public class EnviarEmail {
 			properties.put("mail.smtp.password", "prograpoo1"); // password
 			properties.put("mail.smtp.port", "587");
 			properties.put("mail.smtp.auth", "true");
+			properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 			SmtpAuthenticator authentification= new SmtpAuthenticator();
 			sesion= Session.getDefaultInstance(properties,authentification);
 			mensaje = new MimeMessage(sesion);
